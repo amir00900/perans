@@ -1,0 +1,22 @@
+backend:
+  name: git-gateway
+  branch: main # نام شاخه اصلی گیت‌هاب شما
+
+local_backend: true
+
+publish_mode: simple
+media_folder: "images/uploads" # پوشه‌ای که عکس‌های آپلود شده از پنل در آن ذخیره می‌شوند
+public_folder: "/images/uploads"
+
+collections:
+  - name: "products"
+    label: "محصولات (جواهرات)"
+    folder: "_products" # پوشه‌ای که اطلاعات محصولات در آن ذخیره خواهد شد
+    create: true
+    slug: "{{fields.title}}"
+    fields:
+      - { label: "نام محصول", name: "title", widget: "string" }
+      - { label: "قیمت (تومان یا توضیحات قیمت)", name: "price", widget: "string", required: false }
+      - { label: "تصویر محصول", name: "image", widget: "image" }
+      - { label: "توضیحات محصول", name: "description", widget: "text" }
+      - { label: "لینک سفارش (مثلاً آیدی تلگرام یا لینک مستقیم)", name: "order_link", widget: "string", required: false }
