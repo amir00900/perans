@@ -2,9 +2,8 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
-  site_domain: peransgoldgallery.ir
-  base_url: https://decap-cms-oauth-gh.vercel.app
-  auth_endpoint: api/auth
+  auth_type: implicit # این خط جادو می‌کند و نیاز به واسطه را حذف می‌کند
+  app_id: 0v23lid8pQVy13mbckPP # این همان Client ID توست
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
