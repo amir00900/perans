@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: amir00900/perans
   branch: main
+
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
