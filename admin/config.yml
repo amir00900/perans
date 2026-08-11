@@ -38,3 +38,4 @@ collections:
               - { label: "توضیحات", name: "description", widget: "text" }
               - { label: "لینک سفارش", name: "orderLink", widget: "string" }
               - { label: "فعال است؟", name: "active", widget: "boolean" }
+ 
