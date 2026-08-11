@@ -2,6 +2,9 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
+  site_domain: peransgoldgallery.ir
+  base_url: https://decap-cms-oauth-gh.vercel.app
+  auth_endpoint: api/auth
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
