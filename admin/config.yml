@@ -2,8 +2,6 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
-  base_url: https://p-gate.onrender.com # این آدرس واسطه برای لاگین است
-  auth_endpoint: /auth
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -30,7 +28,7 @@ collections:
     file: "content/products.json"
     fields:
       - name: "items"
-        label: "لیست محصولات"
+        label: "محصولات"
         label_singular: "محصول"
         widget: "list"
         fields:
