@@ -3,7 +3,7 @@ backend:
   repo: amir00900/perans
   branch: main
   auth_type: implicit
-  app_id: 0v23lid8pQVy13mbckPP
+  app_id: Ov23lirxAF8ICEMItDZd
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
