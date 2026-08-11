@@ -2,8 +2,8 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
-  auth_type: implicit # این خط جادو می‌کند و نیاز به واسطه را حذف می‌کند
-  app_id: 0v23lid8pQVy13mbckPP # این همان Client ID توست
+  auth_type: implicit
+  app_id: 0v23lid8pQVy13mbckPP
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -27,16 +27,20 @@ collections:
 
   - name: "products"
     label: "محصولات"
-    file: "content/products.json"
-    fields:
-      - name: "items"
-        label: "محصولات"
-        label_singular: "محصول"
-        widget: "list"
+    # برای اینکه یک فایل تکی باشد، باید از ساختار زیر استفاده کنیم:
+    files:
+      - file: "content/products.json"
+        label: "لیست محصولات"
+        name: "products_list"
         fields:
-          - {label: "عنوان", name: "title", widget: "string"}
-          - {label: "قیمت", name: "price", widget: "string"}
-          - {label: "تصویر", name: "image", widget: "image"}
-          - {label: "توضیحات", name: "description", widget: "text"}
-          - {label: "لینک سفارش", name: "orderLink", widget: "string"}
-          - {label: "فعال است؟", name: "active", widget: "boolean"}
+          - name: "items"
+            label: "محصولات"
+            label_singular: "محصول"
+            widget: "list"
+            fields:
+              - {label: "عنوان", name: "title", widget: "string"}
+              - {label: "قیمت", name: "price", widget: "string"}
+              - {label: "تصویر", name: "image", widget: "image"}
+              - {label: "توضیحات", name: "description", widget: "text"}
+              - {label: "لینک سفارش", name: "orderLink", widget: "string"}
+              - {label: "فعال است؟", name: "active", widget: "boolean"}
