@@ -1,15 +1,15 @@
 backend:
   name: github
-  repo: amir00900/perans # نام مخزن تو
+  repo: amir00900/perans
   branch: main
   auth_type: implicit
-  app_id: 0v23lid8pQVy13mbckPP # کلاینت آی‌دی گیت‌هاب تو
+  app_id: 0v23lid8pQVy13mbckPP
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
-  - name: "settings"
+  - name: "site"
     label: "تنظیمات سایت"
     files:
       - file: "content/site.json"
@@ -17,7 +17,14 @@ collections:
         name: "site_info"
         fields:
           - {label: "نام برند", name: "brandName", widget: "string"}
-  
+          - {label: "تیتر اصلی", name: "heroTitle", widget: "string"}
+          - {label: "زیر تیتر", name: "heroSubtitle", widget: "text"}
+          - {label: "متن درباره ما", name: "aboutText", widget: "text"}
+          - {label: "تلفن", name: "phone", widget: "string"}
+          - {label: "اینستاگرام", name: "instagram", widget: "string"}
+          - {label: "واتس‌اپ", name: "whatsapp", widget: "string"}
+          - {label: "آدرس", name: "address", widget: "string"}
+
   - name: "products_collection"
     label: "لیست محصولات"
     files:
@@ -27,6 +34,12 @@ collections:
         fields:
           - name: "items"
             label: "محصولات"
+            label_singular: "محصول"
             widget: "list"
             fields:
               - {label: "عنوان", name: "title", widget: "string"}
+              - {label: "قیمت", name: "price", widget: "string"}
+              - {label: "تصویر", name: "image", widget: "image"}
+              - {label: "توضیحات", name: "description", widget: "text"}
+              - {label: "لینک سفارش", name: "orderLink", widget: "string"}
+              - {label: "فعال است؟", name: "active", widget: "boolean"}
