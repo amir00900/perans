@@ -1,9 +1,9 @@
 backend:
   name: github
-  repo: amir00900/perans
+  repo: amir00900/perans # نام مخزن تو
   branch: main
   auth_type: implicit
-  app_id: 0v23lid8pQVy13mbckPP
+  app_id: 0v23lid8pQVy13mbckPP # کلاینت آی‌دی گیت‌هاب تو
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -17,8 +17,6 @@ collections:
         name: "site_info"
         fields:
           - {label: "نام برند", name: "brandName", widget: "string"}
-          - {label: "تیتر اصلی", name: "heroTitle", widget: "string"}
-          - {label: "زیر تیتر", name: "heroSubtitle", widget: "text"}
   
   - name: "products_collection"
     label: "لیست محصولات"
@@ -32,5 +30,3 @@ collections:
             widget: "list"
             fields:
               - {label: "عنوان", name: "title", widget: "string"}
-              - {label: "قیمت", name: "price", widget: "string"}
-              - {label: "تصویر", name: "image", widget: "image"}
