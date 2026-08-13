@@ -4,473 +4,420 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0f0d0b" />
-  <meta name="description" content="پرنس گلد  | طلا و جواهرات لوکس" />
+  <meta name="description" content="پرنس گلد | طلا و جواهرات لوکس" />
   <title>پرنس گلد | طلا و جواهرات لوکس</title>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
 
-    :root{
-      --bg:#0f0d0b;
-      --bg-2:#15110e;
-      --panel:#181410;
-      --line:rgba(214,178,110,.18);
-      --text:#f5efe5;
-      --muted:#c7bca9;
-      --gold:#d8b46c;
-      --gold-2:#f0d79a;
-      --shadow:0 20px 60px rgba(0,0,0,.45);
-      --radius:18px;
+    :root {
+      --bg: #0f0d0b;
+      --bg-2: #15110e;
+      --panel: #181410;
+      --line: rgba(214, 178, 110, .18);
+      --text: #f5efe5;
+      --muted: #c7bca9;
+      --gold: #d8b46c;
+      --gold-2: #f0d79a;
+      --shadow: 0 20px 60px rgba(0, 0, 0, .45);
+      --radius: 18px;
     }
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:"Vazirmatn",Tahoma,sans-serif;
-      color:var(--text);
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Vazirmatn", Tahoma, sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at 15% 15%, rgba(216,180,108,.10), transparent 28%),
-        radial-gradient(circle at 85% 20%, rgba(240,215,154,.08), transparent 24%),
+        radial-gradient(circle at 15% 15%, rgba(216, 180, 108, .10), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(240, 215, 154, .08), transparent 24%),
         linear-gradient(180deg, #0d0b09 0%, #11100d 100%);
-      overflow-x:hidden;
+      overflow-x: hidden;
     }
 
-    a{color:inherit;text-decoration:none}
-    .container{width:min(1180px,calc(100% - 32px));margin:auto}
-
-    .topbar{
-      border-bottom:1px solid var(--line);
-      background:rgba(8,7,6,.62);
-      backdrop-filter:blur(10px);
-      position:sticky;
-      top:0;
-      z-index:20;
-    }
-    .nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-      padding:18px 0;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .brand strong{
-      font-size:1.05rem;
-      letter-spacing:.4px;
-      color:var(--gold-2);
-    }
-    .brand span{
-      font-size:.76rem;
-      color:var(--muted);
-      letter-spacing:2.8px;
-      text-transform:uppercase;
-    }
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .nav-links a{
-      color:#e9e1d4;
-      font-size:.92rem;
-      opacity:.92;
-    }
-    .nav-links a:hover{color:var(--gold-2)}
-
-    .hero{
-      padding:34px 0 18px;
-    }
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:18px;
-      align-items:stretch;
-      min-height:calc(100vh - 98px);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .hero-copy,.hero-visual{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      box-shadow:var(--shadow);
-      overflow:hidden;
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: auto;
     }
 
-    .hero-copy{
-      padding:clamp(24px,4vw,52px);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      position:relative;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 7, 6, .62);
+      backdrop-filter: blur(10px);
     }
 
-    .eyebrow{
-      color:var(--gold);
-      letter-spacing:4px;
-      font-size:.75rem;
-      text-transform:uppercase;
-      margin-bottom:18px;
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 0;
     }
 
-    h1{
-      margin:0;
-      font-size:clamp(2.5rem,6.4vw,5.3rem);
-      line-height:1.12;
-      letter-spacing:-.4px;
-      font-weight:800;
-      max-width:10ch;
-    }
-    h1 .gold{
-      color:var(--gold-2);
-      display:block;
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .lead{
-      margin:22px 0 0;
-      max-width:56ch;
-      color:var(--muted);
-      line-height:2.1;
-      font-size:1rem;
+    .brand strong {
+      font-size: 1.05rem;
+      letter-spacing: .4px;
+      color: var(--gold-2);
     }
 
-    .meta-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:28px;
-    }
-    .chip{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-      color:#efe6d6;
-      padding:10px 14px;
-      border-radius:999px;
-      font-size:.88rem;
-      white-space:nowrap;
+    .brand span {
+      font-size: .76rem;
+      color: var(--muted);
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
     }
 
-    .actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:32px;
-    }
-    .btn{
-      min-height:48px;
-      padding:0 20px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:600;
-      border:1px solid var(--gold);
-      transition:.22s ease;
-      cursor:pointer;
-    }
-    .btn.primary{
-      background:linear-gradient(180deg, var(--gold-2), var(--gold));
-      color:#23180b;
-      box-shadow:0 12px 28px rgba(216,180,108,.18);
-    }
-    .btn.ghost{
-      background:transparent;
-      color:var(--text);
-    }
-    .btn:hover{
-      transform:translateY(-2px);
-      filter:brightness(1.03);
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .hero-visual{
-      position:relative;
-      min-height:560px;
-      display:flex;
-      align-items:flex-end;
-      justify-content:flex-start;
+    .nav-links a {
+      color: #e9e1d4;
+      font-size: .92rem;
+      opacity: .92;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-2);
+    }
+
+    .hero {
+      padding: 34px 0 18px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+      min-height: calc(100vh - 98px);
+    }
+
+    .hero-copy,
+    .hero-visual {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(255, 255, 255, .01));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-copy {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(24px, 4vw, 52px);
+    }
+
+    .eyebrow {
+      margin-bottom: 18px;
+      color: var(--gold);
+      letter-spacing: 4px;
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 10ch;
+      margin: 0;
+      font-size: clamp(2.5rem, 6.4vw, 5.3rem);
+      line-height: 1.12;
+      letter-spacing: -.4px;
+      font-weight: 800;
+    }
+
+    h1 .gold {
+      display: block;
+      color: var(--gold-2);
+    }
+
+    .lead {
+      max-width: 56ch;
+      margin: 22px 0 0;
+      color: var(--muted);
+      line-height: 2.1;
+      font-size: 1rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .02);
+      color: #efe6d6;
+      font-size: .88rem;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      font-weight: 600;
+      transition: .22s ease;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: linear-gradient(180deg, var(--gold-2), var(--gold));
+      color: #23180b;
+      box-shadow: 0 12px 28px rgba(216, 180, 108, .18);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    /* کادر بزرگ سمت چپ/راست صفحه - بدون استفاده از عکس van-cleef */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      min-height: 560px;
       background:
-        linear-gradient(180deg, rgba(12,10,8,.10), rgba(12,10,8,.72)),
-        url('/van-cleef-5.webp') center/cover no-repeat;
+        radial-gradient(circle at 70% 25%, rgba(255, 215, 140, .18), transparent 22%),
+        linear-gradient(135deg, #241b12 0%, #15100c 48%, #080706 100%);
     }
-    .hero-visual::after{
-      content:"";
-      position:absolute;
-      inset:0;
+
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
       background:
-        linear-gradient(135deg, rgba(0,0,0,.35), transparent 45%),
-        radial-gradient(circle at 70% 25%, rgba(255,215,140,.18), transparent 22%);
-    }
-    .visual-card{
-      position:relative;
-      z-index:1;
-      margin:22px;
-      width:min(100%, 360px);
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(16,13,11,.72);
-      backdrop-filter:blur(12px);
-      border-radius:16px;
-      padding:18px;
-    }
-    .visual-card .label{
-      color:var(--gold-2);
-      font-size:.78rem;
-      letter-spacing:3px;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .visual-card h2{
-      margin:0;
-      font-size:1.4rem;
-      line-height:1.55;
-    }
-    .visual-card p{
-      margin:10px 0 0;
-      color:var(--muted);
-      line-height:1.9;
-      font-size:.94rem;
+        linear-gradient(135deg, rgba(0, 0, 0, .18), transparent 55%),
+        radial-gradient(circle at 20% 75%, rgba(216, 180, 108, .12), transparent 25%);
     }
 
-    .section{
-      padding:22px 0 0;
-    }
-    .section-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-    }
-    .card{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(255,255,255,.02);
-      padding:20px;
-      min-height:180px;
-    }
-    .card .num{
-      color:var(--gold-2);
-      font-size:.8rem;
-      letter-spacing:3px;
-      text-transform:uppercase;
-    }
-    .card h3{
-      margin:12px 0 10px;
-      font-size:1.15rem;
-    }
-    .card p{
-      margin:0;
-      color:var(--muted);
-      line-height:2;
-      font-size:.95rem;
+    .visual-card {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 360px);
+      margin: 22px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 16px;
+      background: rgba(16, 13, 11, .72);
+      backdrop-filter: blur(12px);
     }
 
-    .gallery{
-      padding:18px 0 0;
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-    }
-    .gallery-item{
-      aspect-ratio:1/1.05;
-      border-radius:16px;
-      border:1px solid var(--line);
-      overflow:hidden;
-      background:#181410;
-      position:relative;
-      box-shadow:var(--shadow);
-    }
-    .gallery-item img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      filter:saturate(.92) contrast(1.03);
-      transition:.35s ease;
-    }
-    .gallery-item:hover img{transform:scale(1.04)}
-    .gallery-item .caption{
-      position:absolute;
-      inset:auto 0 0 0;
-      padding:14px;
-      background:linear-gradient(180deg, transparent, rgba(0,0,0,.72));
-      font-size:.92rem;
+    .visual-card .label {
+      margin-bottom: 10px;
+      color: var(--gold-2);
+      font-size: .78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
 
-    .contact{
-      padding:34px 0 54px;
-    }
-    .contact-box{
-      border:1px solid var(--line);
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      padding:28px;
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:18px;
-      align-items:center;
-    }
-    .contact-box h3{
-      margin:0 0 10px;
-      font-size:1.6rem;
-    }
-    .contact-box p{
-      margin:0;
-      color:var(--muted);
-      line-height:2;
-    }
-    .contact-links{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      justify-content:flex-end;
+    .visual-card h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      line-height: 1.55;
     }
 
-    .footer{
-      padding:22px 0 34px;
-      border-top:1px solid var(--line);
-      color:var(--muted);
-      font-size:.9rem;
-      text-align:center;
+    .visual-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: .94rem;
     }
 
-    @media (max-width: 960px){
+    .section {
+      padding: 22px 0 0;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      min-height: 180px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .card .num {
+      color: var(--gold-2);
+      font-size: .8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      margin: 12px 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 2;
+      font-size: .95rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 18px 0 0;
+    }
+
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1 / 1.05;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #181410;
+      box-shadow: var(--shadow);
+    }
+
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.92) contrast(1.03);
+      transition: .35s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .gallery-item .caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 14px;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .72));
+      font-size: .92rem;
+    }
+
+    .contact {
+      padding: 34px 0 54px;
+    }
+
+    .contact-box {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: center;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .015));
+    }
+
+    .contact-box h3 {
+      margin: 0 0 10px;
+      font-size: 1.6rem;
+    }
+
+    .contact-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 2;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .footer {
+      padding: 22px 0 34px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 960px) {
       .hero-grid,
       .section-grid,
       .gallery,
-      .contact-box{
-        grid-template-columns:1fr;
+      .contact-box {
+        grid-template-columns: 1fr;
       }
-      .hero-visual{min-height:420px}
-      .contact-links{justify-content:flex-start}
-      h1{max-width:none}
+
+      .hero-visual {
+        min-height: 420px;
+      }
+
+      .contact-links {
+        justify-content: flex-start;
+      }
+
+      h1 {
+        max-width: none;
+      }
     }
 
-    @media (max-width: 640px){
-      .nav{
-        flex-direction:column;
-        align-items:flex-start;
+    @media (max-width: 640px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
       }
-      .nav-links{gap:12px}
-      .hero{padding-top:18px}
-      .hero-copy{padding:22px}
-      .hero-visual{min-height:360px}
-      .visual-card{margin:16px}
-      .btn{width:100%}
-      .actions{width:100%}
-      .actions a{width:100%}
-    }
-  </style>
-</head>
-<body>
-  <header class="topbar">
-    <div class="container nav">
-      <div class="brand">
-        <strong>پرنس گلد </strong>
-        <span>Perans Gold Gallery</span>
-      </div>
-      <nav class="nav-links">
-        <a href="#about">درباره ما</a>
-        <a href="#gallery">گالری</a>
-        <a href="#contact">تماس با ما</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="hero">
-    <div class="container hero-grid">
-      <section class="hero-copy">
-        <div class="eyebrow">Luxury Jewelry House</div>
-        <h1>
-          طلا و جواهرات
-          <span class="gold">با امضای خاص</span>
-        </h1>
-        <p class="lead">
-          پرنس گلد گالری، انتخابی برای کسانی که دنبال ظرافت، کیفیت و طراحی چشم‌گیر هستند.
-        </p>
+      .nav-links {
+        gap: 12px;
+      }
 
-        <div class="meta-row">
-          <div class="chip">طراحی خاص</div>
-          <div class="chip">سفارش اختصاصی</div>
-          <div class="chip">مشاوره خرید</div>
-          <div class="chip">ارسال سریع</div>
-        </div>
-
-        <div class="actions">
-          <a class="btn primary" href="https://ble.ir/peransgoldgallery">ارتباط با ما</a>
-          <a class="btn ghost" href="#gallery">دیدن گالری</a>
-        </div>
-      </section>
-
-      <section class="hero-visual" aria-label="نمای لوکس طلا و جواهرات پرنس گلد">
-        <div class="visual-card">
-          <div class="label">New Collection</div>
-          <h2>کالکشن جدید ونکلیف</h2>
-          <p>ترکیبی از سنگ‌های قیمتی و طلای ۱۸ عیار با طراحی منحصر‌به‌فرد.</p>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <section class="section" id="about">
-    <div class="container section-grid">
-      <article class="card">
-        <div class="num">01</div>
-        <h3>هویت برند</h3>
-        <p>یک صفحه‌ی تمیز و لوکس که روی حس برند کار می‌کند، نه شلوغی و متن اضافه.</p>
-      </article>
-      <article class="card">
-        <div class="num">02</div>
-        <h3>فروش‌محور</h3>
-        <p>دکمه‌های واضح و بخش تماس سریع، برای تبدیل بازدیدکننده به مشتری.</p>
-      </article>
-      <article class="card">
-        <div class="num">03</div>
-        <h3>آماده توسعه</h3>
-        <p>بعداً خیلی راحت می‌توانیم گالری، محصولات، صفحه درباره ما و فرم سفارش اضافه کنیم.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="gallery">
-    <div class="container gallery">
-      <figure class="gallery-item">
-        <img src="/van-cleef-5.webp" alt="جواهر لوکس ونکلیف">
-        <figcaption class="caption">Van Cleef Series</figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1617038220318-5c3726a9f5b7?auto=format&fit=crop&w=900&q=80" alt="جواهر لوکس 2">
-        <figcaption class="caption">Bracelet Series</figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=900&q=80" alt="جواهر لوکس 3">
-        <figcaption class="caption">Necklace Showcase</figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1617038220315-8ec0b0c2c4f4?auto=format&fit=crop&w=900&q=80" alt="جواهر لوکس 4">
-        <figcaption class="caption">Luxury Details</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="contact" id="contact">
-    <div class="container contact-box">
-      <div>
-        <h3>تماس با ما</h3>
-        <p>برای مشاوره و سفارش با ما در ارتباط باشید.</p>
-      </div>
-      <div class="contact-links">
-        <a class="btn ghost" href="https://ble.ir/peransgoldgallery" target="_blank" rel="noopener">بله</a>
-        <a class="btn ghost" href="https://instagram.com/peransgold" target="_blank" rel="noopener">اینستاگرام</a>
-        <a class="btn primary" href="tel:+98912XXXXXXX">تماس مستقیم</a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    © 2026 Perans Gold Gallery
-  </footer>
-</body>
-</html>
+      .hero {
+        padding
