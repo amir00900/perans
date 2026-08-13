@@ -3,421 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f0d0b" />
-  <meta name="description" content="پرنس گلد | طلا و جواهرات لوکس" />
   <title>پرنس گلد | طلا و جواهرات لوکس</title>
-
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
-
-    :root {
-      --bg: #0f0d0b;
-      --bg-2: #15110e;
-      --panel: #181410;
-      --line: rgba(214, 178, 110, .18);
-      --text: #f5efe5;
-      --muted: #c7bca9;
-      --gold: #d8b46c;
-      --gold-2: #f0d79a;
-      --shadow: 0 20px 60px rgba(0, 0, 0, .45);
-      --radius: 18px;
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap');
+    :root{
+      --bg:#0f0d0b; --text:#f5efe5; --gold:#d8b46c; --gold-2:#f0d79a;
+      --line:rgba(214,178,110,.15); --shadow:0 15px 40px rgba(0,0,0,.5);
     }
-
-    * {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:"Vazirmatn",sans-serif; color:var(--text); background:var(--bg); overflow-x:hidden;
     }
-
-    html {
-      scroll-behavior: smooth;
+    .container{width:min(1140px,calc(100% - 32px)); margin:auto}
+    
+    /* Header */
+    header{ border-bottom:1px solid var(--line); padding:15px 0; background:rgba(15,13,11,.9); position:sticky; top:0; z-index:100;}
+    .nav{display:flex; justify-content:space-between; align-items:center}
+    .brand strong{font-size:1.2rem; color:var(--gold-2); display:block}
+    .brand span{font-size:.7rem; letter-spacing:2px; color:#c7bca9}
+    
+    /* Hero */
+    .hero{padding:40px 0; display:grid; grid-template-columns:1fr 1fr; gap:20px; min-height:80vh; align-items:center}
+    .hero-content{padding-right:20px}
+    h1{font-size:clamp(2rem, 5vw, 4rem); line-height:1.2; margin:0}
+    h1 span{color:var(--gold); display:block}
+    .hero-p{color:#c7bca9; line-height:1.8; margin:20px 0; font-size:1.1rem}
+    
+    /* Image Box */
+    .hero-img{
+      height:550px; border-radius:20px; border:1px solid var(--line);
+      background: url('/van-cleef-5.webp') center/cover no-repeat;
+      box-shadow:var(--shadow);
     }
-
-    body {
-      margin: 0;
-      font-family: "Vazirmatn", Tahoma, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 15% 15%, rgba(216, 180, 108, .10), transparent 28%),
-        radial-gradient(circle at 85% 20%, rgba(240, 215, 154, .08), transparent 24%),
-        linear-gradient(180deg, #0d0b09 0%, #11100d 100%);
-      overflow-x: hidden;
+    
+    /* Buttons */
+    .btn{
+      display:inline-flex; padding:12px 25px; border-radius:50px; text-decoration:none; 
+      font-weight:bold; transition:.3s; border:1px solid var(--gold);
     }
+    .primary{background:var(--gold); color:#1a140e}
+    .primary:hover{transform:translateY(-3px); box-shadow:0 10px 20px rgba(216,180,108,.3)}
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    /* Gallery Section */
+    .section-title{text-align:center; margin:60px 0 30px; font-size:1.8rem; color:var(--gold-2)}
+    .gallery{display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:15px; margin-bottom:50px}
+    .item{aspect-ratio:1/1; border-radius:15px; overflow:hidden; border:1px solid var(--line); position:relative}
+    .item img{width:100%; height:100%; object-fit:cover; transition:.5s}
+    .item:hover img{transform:scale(1.1)}
+    
+    @media (max-width:850px){
+      .hero{grid-template-columns:1fr; text-align:center}
+      .hero-content{padding:0}
+      .hero-img{height:350px; order:-1}
     }
+  </style>
+</head>
+<body>
 
-    .container {
-      width: min(1180px, calc(100% - 32px));
-      margin: auto;
-    }
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <strong>پرنس گلد</strong>
+        <span>PERANS GOLD</span>
+      </div>
+      <nav>
+        <a href="https://ble.ir/peransgoldgallery" style="color:var(--gold); text-decoration:none; font-weight:bold">ارتباط با ما</a>
+      </nav>
+    </div>
+  </header>
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      border-bottom: 1px solid var(--line);
-      background: rgba(8, 7, 6, .62);
-      backdrop-filter: blur(10px);
-    }
+  <main class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>ظرافت طلا در<span>کالکشن ونکلیف</span></h1>
+        <p class="hero-p">طراحی‌های خاص و منحصر‌به‌فرد برای کسانی که به دنبال درخشش متفاوتی هستند. تمام قطعات با طلای ۱۸ عیار و دقت فراوان ساخته شده‌اند.</p>
+        <a href="https://ble.ir/peransgoldgallery" class="btn primary">مشاهده قیمت و سفارش</a>
+      </div>
+      <div class="hero-img"></div>
+    </section>
 
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 18px 0;
-    }
+    <h2 class="section-title">ویترین محصولات</h2>
+    <section class="gallery">
+      <!-- تصویر ونکلیف در کادر اول گالری -->
+      <div class="item">
+        <img src="/van-cleef-5.webp" alt="گردنبند ونکلیف">
+      </div>
+      <div class="item">
+        <img src="https://images.unsplash.com/photo-1617038220318-5c3726a9f5b7?auto=format&fit=crop&w=600" alt="محصول ۲">
+      </div>
+      <div class="item">
+        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=600" alt="محصول ۳">
+      </div>
+      <div class="item">
+        <img src="https://images.unsplash.com/photo-1617038220315-8ec0b0c2c4f4?auto=format&fit=crop&w=600" alt="محصول ۴">
+      </div>
+    </section>
+  </main>
 
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+  <footer style="text-align:center; padding:40px; color:#666; border-top:1px solid var(--line)">
+    © 2026 گالری پرنس گلد | تمامی حقوق محفوظ است.
+  </footer>
 
-    .brand strong {
-      font-size: 1.05rem;
-      letter-spacing: .4px;
-      color: var(--gold-2);
-    }
-
-    .brand span {
-      font-size: .76rem;
-      color: var(--muted);
-      letter-spacing: 2.8px;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav-links a {
-      color: #e9e1d4;
-      font-size: .92rem;
-      opacity: .92;
-    }
-
-    .nav-links a:hover {
-      color: var(--gold-2);
-    }
-
-    .hero {
-      padding: 34px 0 18px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 18px;
-      align-items: stretch;
-      min-height: calc(100vh - 98px);
-    }
-
-    .hero-copy,
-    .hero-visual {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(255, 255, 255, .01));
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .hero-copy {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: clamp(24px, 4vw, 52px);
-    }
-
-    .eyebrow {
-      margin-bottom: 18px;
-      color: var(--gold);
-      letter-spacing: 4px;
-      font-size: .75rem;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 10ch;
-      margin: 0;
-      font-size: clamp(2.5rem, 6.4vw, 5.3rem);
-      line-height: 1.12;
-      letter-spacing: -.4px;
-      font-weight: 800;
-    }
-
-    h1 .gold {
-      display: block;
-      color: var(--gold-2);
-    }
-
-    .lead {
-      max-width: 56ch;
-      margin: 22px 0 0;
-      color: var(--muted);
-      line-height: 2.1;
-      font-size: 1rem;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 28px;
-    }
-
-    .chip {
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .02);
-      color: #efe6d6;
-      font-size: .88rem;
-      white-space: nowrap;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 32px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 0 20px;
-      border: 1px solid var(--gold);
-      border-radius: 999px;
-      font-weight: 600;
-      transition: .22s ease;
-      cursor: pointer;
-    }
-
-    .btn.primary {
-      background: linear-gradient(180deg, var(--gold-2), var(--gold));
-      color: #23180b;
-      box-shadow: 0 12px 28px rgba(216, 180, 108, .18);
-    }
-
-    .btn.ghost {
-      background: transparent;
-      color: var(--text);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-    }
-
-    /* کادر بزرگ سمت چپ/راست صفحه - بدون استفاده از عکس van-cleef */
-    .hero-visual {
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      min-height: 560px;
-      background:
-        radial-gradient(circle at 70% 25%, rgba(255, 215, 140, .18), transparent 22%),
-        linear-gradient(135deg, #241b12 0%, #15100c 48%, #080706 100%);
-    }
-
-    .hero-visual::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, rgba(0, 0, 0, .18), transparent 55%),
-        radial-gradient(circle at 20% 75%, rgba(216, 180, 108, .12), transparent 25%);
-    }
-
-    .visual-card {
-      position: relative;
-      z-index: 1;
-      width: min(100%, 360px);
-      margin: 22px;
-      padding: 18px;
-      border: 1px solid rgba(255, 255, 255, .14);
-      border-radius: 16px;
-      background: rgba(16, 13, 11, .72);
-      backdrop-filter: blur(12px);
-    }
-
-    .visual-card .label {
-      margin-bottom: 10px;
-      color: var(--gold-2);
-      font-size: .78rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    .visual-card h2 {
-      margin: 0;
-      font-size: 1.4rem;
-      line-height: 1.55;
-    }
-
-    .visual-card p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      line-height: 1.9;
-      font-size: .94rem;
-    }
-
-    .section {
-      padding: 22px 0 0;
-    }
-
-    .section-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .card {
-      min-height: 180px;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, .02);
-    }
-
-    .card .num {
-      color: var(--gold-2);
-      font-size: .8rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    .card h3 {
-      margin: 12px 0 10px;
-      font-size: 1.15rem;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 2;
-      font-size: .95rem;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      padding: 18px 0 0;
-    }
-
-    .gallery-item {
-      position: relative;
-      aspect-ratio: 1 / 1.05;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #181410;
-      box-shadow: var(--shadow);
-    }
-
-    .gallery-item img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(.92) contrast(1.03);
-      transition: .35s ease;
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.04);
-    }
-
-    .gallery-item .caption {
-      position: absolute;
-      inset: auto 0 0 0;
-      padding: 14px;
-      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .72));
-      font-size: .92rem;
-    }
-
-    .contact {
-      padding: 34px 0 54px;
-    }
-
-    .contact-box {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 18px;
-      align-items: center;
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .015));
-    }
-
-    .contact-box h3 {
-      margin: 0 0 10px;
-      font-size: 1.6rem;
-    }
-
-    .contact-box p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 2;
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .footer {
-      padding: 22px 0 34px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: .9rem;
-      text-align: center;
-    }
-
-    @media (max-width: 960px) {
-      .hero-grid,
-      .section-grid,
-      .gallery,
-      .contact-box {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-visual {
-        min-height: 420px;
-      }
-
-      .contact-links {
-        justify-content: flex-start;
-      }
-
-      h1 {
-        max-width: none;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .nav-links {
-        gap: 12px;
-      }
-
-      .hero {
-        padding
+</body>
+</html>
