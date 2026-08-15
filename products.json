@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "انگشتر مینیمال طلا",
+    "description": "طراحی ظریف و سبک برای استفاده روزمره",
+    "price": 12500000,
+    "badge": "پرفروش",
+    "image": "images/products/ring1.jpg",
+    "weight": "1.2 گرم",
+    "visible": true
+  },
+  {
+    "id": 2,
+    "title": "گردنبند کلاسیک",
+    "description": "مناسب استایل رسمی و هدیه",
+    "price": 22800000,
+    "badge": "ویژه",
+    "image": "images/products/necklace1.jpg",
+    "weight": "2.8 گرم",
+    "visible": true
+  }
+]
