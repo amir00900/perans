@@ -35,6 +35,32 @@
 
   <!-- نوار قیمت -->
   <div class="gold-ticker">نرخ لحظه‌ای طلای ۱۸ عیار: <span id="goldPrice">...</span></div>
+<div id="price-container" style="padding: 20px; border: 1px solid #ccc; text-align: center;">
+    <h3>قیمت طلای ۱۸ عیار</h3>
+    <div id="price-result" style="font-size: 24px; font-weight: bold; color: #d4af37;">در حال دریافت...</div>
+    <small>منبع: api.codebazan.ir</small>
+</div>
+
+<script>
+    async function fetchGoldPrice() {
+        const display = document.getElementById('price-result');
+        try {
+            // فراخوانی API قیمت طلا
+            const response = await fetch('https://api.codebazan.ir/gold/');
+            const data = await response.json();
+            
+            // استخراج قیمت طلای ۱۸ عیار از پاسخ API
+            // دقت کن که ساختار پاسخ APIها ممکن است متفاوت باشد
+            const gold18 = data.gold18_price; 
+            
+            display.textContent = Number(gold18).toLocaleString('fa-IR') + ' تومان';
+        } catch (error) {
+            display.textContent = 'خطا در دریافت قیمت';
+            console.error('API Error:', error);
+        }
+    }
+    fetchGoldPrice();
+</script>
 
   <!-- بنر -->
   <section class="hero-full">
