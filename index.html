@@ -8,59 +8,93 @@
     :root{ --bg:#fdfdfd; --gold:#d4af37; --text:#333; }
     body{margin:0; font-family: Tahoma, sans-serif; background:var(--bg);}
     .container{max-width:1200px; margin:0 auto; padding:0 20px}
-    
+
     /* نوار قیمت */
-    .gold-ticker { background: #fdfaf5; color: #8b7355; padding: 8px 0; text-align: center; border-bottom: 1px solid #e5dcc3; font-size: 0.8rem; }
-    
-    /* بنر تمام‌صفحه */
-    .hero-full { 
-      height: 90vh; 
-      background: url('ax/gold-jewelry-collection-hero.webp') no-repeat center center; 
-      background-size: cover; 
-      display: flex; flex-direction: column;
+    .gold-ticker {
+      background: #fdfaf5;
+      color: #8b7355;
+      padding: 8px 0;
+      text-align: center;
+      border-bottom: 1px solid #e5dcc3;
+      font-size: 0.8rem;
     }
-    
+
+    .gold-ticker a{
+      color: inherit;
+      text-decoration: none;
+      display: block;
+    }
+
+    .gold-ticker a:hover{
+      opacity: 0.9;
+    }
+
+    /* بنر تمام‌صفحه */
+    .hero-full {
+      height: 90vh;
+      background: url('images/gold-jewelry-collection-hero.webp') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+    }
+
     /* هدرِ داخل بنر */
-    .header-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; color: white; }
-    .logo-area { display: flex; align-items: center; gap: 10px; }
-    .logo-area img { width: 50px; border-radius: 10px; border: 2px solid white; }
-    
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      color: white;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-area img {
+      width: 50px;
+      border-radius: 10px;
+      border: 2px solid white;
+    }
+
     /* محتوای وسط بنر */
-    .hero-content { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
-    .hero-box { background: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 20px; max-width: 500px; }
-    .btn-gold { background: var(--gold); color: #fff; padding: 12px 30px; border-radius: 8px; display: inline-block; font-weight: bold; margin-top: 20px;}
+    .hero-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .hero-box {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 500px;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: bold;
+      margin-top: 20px;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
 
   <!-- نوار قیمت -->
-  <div class="gold-ticker">نرخ لحظه‌ای طلای ۱۸ عیار: <span id="goldPrice">...</span></div>
-<div id="price-container" style="padding: 20px; border: 1px solid #ccc; text-align: center;">
-    <h3>قیمت طلای ۱۸ عیار</h3>
-    <div id="price-result" style="font-size: 24px; font-weight: bold; color: #d4af37;">در حال دریافت...</div>
-    <small>منبع: api.codebazan.ir</small>
-</div>
-
-<script>
-    async function fetchGoldPrice() {
-        const display = document.getElementById('price-result');
-        try {
-            // فراخوانی API قیمت طلا
-            const response = await fetch('https://api.codebazan.ir/gold/');
-            const data = await response.json();
-            
-            // استخراج قیمت طلای ۱۸ عیار از پاسخ API
-            // دقت کن که ساختار پاسخ APIها ممکن است متفاوت باشد
-            const gold18 = data.gold18_price; 
-            
-            display.textContent = Number(gold18).toLocaleString('fa-IR') + ' تومان';
-        } catch (error) {
-            display.textContent = 'خطا در دریافت قیمت';
-            console.error('API Error:', error);
-        }
-    }
-    fetchGoldPrice();
-</script>
+  <div class="gold-ticker">
+    <a href="gold-price.html">
+      نرخ لحظه‌ای طلای ۱۸ عیار:
+      <span id="goldPrice">در حال دریافت...</span>
+    </a>
+  </div>
 
   <!-- بنر -->
   <section class="hero-full">
@@ -68,7 +102,7 @@
       <!-- هدر -->
       <header class="header-nav">
         <div class="logo-area">
-          <img src="ax/logo.png" alt="Logo">
+          <img src="images/logo.png" alt="Logo">
           <strong>گالری پرنس</strong>
         </div>
         <nav><a href="#products" style="color:white">محصولات</a></nav>
@@ -84,6 +118,38 @@
       </div>
     </div>
   </section>
+
+  <script>
+    async function fetchGoldPrice() {
+      const display = document.getElementById('goldPrice');
+
+      try {
+        const response = await fetch(
+          'https://eojmejm8zxddf8l.m.pipedream.net',
+          { cache: 'no-store' }
+        );
+
+        const data = await response.json();
+
+        if (!data.price) {
+          throw new Error('no price');
+        }
+
+        const formatted =
+          Number(data.price).toLocaleString('fa-IR') + ' تومان';
+
+        display.textContent = formatted;
+        localStorage.setItem('last_gold_price', formatted);
+      } catch (error) {
+        const last = localStorage.getItem('last_gold_price');
+        display.textContent = last || 'استعلام قیمت';
+        console.error('Gold price error:', error);
+      }
+    }
+
+    fetchGoldPrice();
+    setInterval(fetchGoldPrice, 600000);
+  </script>
 
   <!-- بقیه محتوا... -->
 </body>
