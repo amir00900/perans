@@ -2,7 +2,7 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
-  base_url: https://perans-gold-auth.aseyeed1.workers.dev
+  base_url: https://perans-gold-auth.aseyeed1.workers.dev/
   auth_endpoint: auth
   client_id: Ov23liwWMqKpUaAiBqqK
 
