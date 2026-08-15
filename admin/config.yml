@@ -2,30 +2,20 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
-  base_url: https://perans-gold-auth.aseyeed1.workers.dev/
+  base_url: https://perans-gold-auth.aseyeed1.workers.dev
   auth_endpoint: auth
-  client_id: Ov23liwWMqKpUaAiBqqK
 
-media_folder: ""
-public_folder: ""
+media_folder: "assets/images"
+public_folder: "/assets/images"
 
 collections:
-  - name: "site_data"
-    label: "اطلاعات سایت"
-    files:
-      - file: "content/site.json"
-        label: "تنظیمات عمومی سایت"
-        name: "site"
-        fields:
-          - {label: "عنوان سایت", name: "title", widget: "string"}
-          - {label: "توضیحات", name: "description", widget: "string"}
-      
-      - file: "content/products.json"
-        label: "محصولات"
-        name: "products"
-        fields:
-          - {label: "لیست محصولات", name: "products", widget: "list", fields: [
-              {label: "نام محصول", name: "name", widget: "string"},
-              {label: "قیمت", name: "price", widget: "string"},
-              {label: "تصویر", name: "image", widget: "image"}
-            ]}
+  - name: "products"
+    label: "Products"
+    folder: "products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Price", name: "price", widget: "number"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Image", name: "image", widget: "image"}
