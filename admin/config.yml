@@ -2,40 +2,29 @@ backend:
   name: github
   repo: amir00900/perans
   branch: main
+  base_url: https://perans-gold-auth.aseyeed1.workers.dev
+  auth_endpoint: auth
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+media_folder: ""
+public_folder: ""
 
 collections:
-  - name: "site"
-    label: "تنظیمات سایت"
+  - name: "site_data"
+    label: "اطلاعات سایت"
     files:
       - file: "content/site.json"
-        label: "اطلاعات پایه"
-        name: "site_info"
+        label: "تنظیمات عمومی سایت"
+        name: "site"
         fields:
-          - { label: "نام برند", name: "brandName", widget: "string" }
-          - { label: "تیتر اصلی", name: "heroTitle", widget: "string" }
-          - { label: "زیرتیتر", name: "heroSubtitle", widget: "text" }
-          - { label: "متن درباره ما", name: "aboutText", widget: "text" }
-          - { label: "تلفن", name: "phone", widget: "string" }
-          - { label: "اینستاگرام", name: "instagram", widget: "string" }
-          - { label: "واتس‌اپ", name: "whatsapp", widget: "string" }
-          - { label: "آدرس", name: "address", widget: "string" }
-
+          - {label: "عنوان سایت", name: "title", widget: "string"}
+          - {label: "توضیحات", name: "description", widget: "string"}
+      
       - file: "content/products.json"
-        label: "ویرایش محصولات"
-        name: "products_file"
+        label: "محصولات"
+        name: "products"
         fields:
-          - name: "items"
-            label: "محصولات"
-            label_singular: "محصول"
-            widget: "list"
-            fields:
-              - { label: "عنوان", name: "title", widget: "string" }
-              - { label: "قیمت", name: "price", widget: "string" }
-              - { label: "تصویر", name: "image", widget: "image" }
-              - { label: "توضیحات", name: "description", widget: "text" }
-              - { label: "لینک سفارش", name: "orderLink", widget: "string" }
-              - { label: "فعال است؟", name: "active", widget: "boolean" }
- 
+          - {label: "لیست محصولات", name: "products", widget: "list", fields: [
+              {label: "نام محصول", name: "name", widget: "string"},
+              {label: "قیمت", name: "price", widget: "string"},
+              {label: "تصویر", name: "image", widget: "image"}
+            ]}
