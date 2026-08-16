@@ -16,24 +16,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch gold price and update price.json
+      - name: Fetch gold price
+        id: fetch
         shell: bash
         run: |
           set -e
-
-          echo "Fetching gold price..."
-          DATA=$(curl -sL https://call1.tgju.org/ajax.json)
-
+          curl -sL https://call1.tgju.org/ajax.json -o tgju.json
           PRICE=$(python3 - <<'PY'
-import json, os, sys
-data = json.loads(os.environ["DATA"])
-p = data["current"]["tgju_gold_irg18"]["p"]
-print(str(p).replace(",", ""))
+import json
+with open("tgju.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+print(data["current"]["tgju_gold_irg18"]["p"].replace(",", ""))
 PY
           )
-
+          echo "PRICE=$PRICE" >> $GITHUB_ENV
           NOW=$(TZ="Asia/Tehran" date '+%Y/%m/%d - %H:%M')
+          echo "NOW=$NOW" >> $GITHUB_ENV
 
+      - name: Update price.json
+        shell: bash
+        run: |
           cat > price.json <<EOF
           {
             "price": "$PRICE",
@@ -41,16 +43,17 @@ PY
             "updated_at": "$NOW"
           }
           EOF
-
-          echo "Updated price.json:"
           cat price.json
-        env:
-          DATA: ${{ steps.fetch.outputs.data }}
 
       - name: Commit and push changes
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add price.json
-          git diff --cached --quiet || git commit -m "Update gold price"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update gold price"
+            git push
+          fi
