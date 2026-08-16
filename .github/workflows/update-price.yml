@@ -16,43 +16,54 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch gold price
-        id: fetch
+      - name: Fetch price and update price.json
         shell: bash
         run: |
-          set -e
-          curl -sL https://call1.tgju.org/ajax.json -o tgju.json
-          PRICE=$(python3 - <<'PY'
-import json
-with open("tgju.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
-print(data["current"]["tgju_gold_irg18"]["p"].replace(",", ""))
-PY
-          )
-          echo "PRICE=$PRICE" >> $GITHUB_ENV
-          NOW=$(TZ="Asia/Tehran" date '+%Y/%m/%d - %H:%M')
-          echo "NOW=$NOW" >> $GITHUB_ENV
+          set -euo pipefail
 
-      - name: Update price.json
-        shell: bash
-        run: |
-          cat > price.json <<EOF
-          {
-            "price": "$PRICE",
-            "unit": "تومان",
-            "updated_at": "$NOW"
+          curl --fail --silent --show-error --location \
+            --retry 3 \
+            https://call1.tgju.org/ajax.json \
+            --output tgju.json
+
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timedelta, timezone
+          from pathlib import Path
+
+          with open("tgju.json", "r", encoding="utf-8") as file:
+              data = json.load(file)
+
+          price_rial = data["current"]["tgju_gold_irg18"]["p"]
+          price_toman = int(str(price_rial).replace(",", "")) // 10
+
+          tehran_time = timezone(timedelta(hours=3, minutes=30))
+          updated_at = datetime.now(tehran_time).strftime("%Y/%m/%d - %H:%M")
+
+          price_data = {
+              "price": str(price_toman),
+              "unit": "تومان",
+              "updated_at": updated_at
           }
-          EOF
-          cat price.json
+
+          Path("price.json").write_text(
+              json.dumps(price_data, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8"
+          )
+
+          print(json.dumps(price_data, ensure_ascii=False, indent=2))
+          PY
 
       - name: Commit and push changes
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add price.json
+
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "Price has not changed."
           else
             git commit -m "Update gold price"
             git push
