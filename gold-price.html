@@ -1,228 +1,228 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>قیمت طلا | پرنس گلد گالری</title>
-  <style>
-    :root{
-      --bg:#fffdf8;
-      --card:#ffffff;
-      --gold:#d4af37;
-      --gold-dark:#b88f1d;
-      --text:#2f2f2f;
-      --muted:#7a7a7a;
-      --border:#eee2c5;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Tahoma, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    .container{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px 16px 60px;
-    }
-    .topbar{
-      background:#faf7ef;
-      border-bottom:1px solid var(--border);
-      padding:10px 16px;
-      font-size:.9rem;
-    }
-    .topbar a{
-      color:var(--gold-dark);
-      text-decoration:none;
-      font-weight:bold;
-    }
-    .hero{
-      margin-top:22px;
-      background:linear-gradient(135deg, #fff 0%, #fffaf0 100%);
-      border:1px solid var(--border);
-      border-radius:24px;
-      padding:28px;
-      box-shadow:0 10px 30px rgba(0,0,0,.04);
-    }
-    .hero h1{
-      margin:0 0 10px;
-      font-size:2rem;
-      color:#222;
-    }
-    .hero p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.9;
-    }
-    .price-box{
-      margin-top:24px;
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:16px;
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-    }
-    .label{
-      color:var(--muted);
-      font-size:.95rem;
-      margin-bottom:8px;
-    }
-    .value{
-      font-size:1.6rem;
-      font-weight:bold;
-      color:var(--gold-dark);
-    }
-    .big{
-      grid-column:1 / -1;
-      text-align:center;
-      padding:28px 20px;
-    }
-    .big .value{
-      font-size:2.2rem;
-    }
-    .actions{
-      margin-top:22px;
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      display:inline-block;
-      padding:12px 18px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:bold;
-    }
-    .btn-primary{
-      background:var(--gold);
-      color:#fff;
-    }
-    .btn-secondary{
-      background:#fff;
-      color:var(--text);
-      border:1px solid var(--border);
-    }
-    .status{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:.9rem;
-    }
-    @media (max-width: 700px){
-      .price-box{grid-template-columns:1fr}
-      .hero h1{font-size:1.6rem}
-      .big .value{font-size:1.8rem}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قیمت لحظه‌ای طلا | پرنس گلد گالری</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #fffdf8 0%, #f7f1e4 100%);
+            color: #24201a;
+        }
+
+        .topbar {
+            padding: 18px 6%;
+            text-align: left;
+            border-bottom: 1px solid #eadfca;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .topbar a {
+            color: #a57c18;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .topbar a:hover {
+            color: #71530d;
+        }
+
+        .container {
+            width: min(950px, calc(100% - 32px));
+            margin: 48px auto;
+            padding: 42px 28px 30px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid #e8dcc2;
+            border-radius: 24px;
+            box-shadow: 0 12px 35px rgba(121, 91, 28, 0.08);
+        }
+
+        h1 {
+            margin: 0 0 14px;
+            font-size: clamp(28px, 4vw, 42px);
+            color: #1e1a13;
+        }
+
+        .intro {
+            margin: 0 auto 34px;
+            color: #77706a;
+            font-size: 16px;
+            line-height: 2;
+        }
+
+        .price-box {
+            padding: 30px 20px;
+            margin-bottom: 16px;
+            border: 1px solid #eadfca;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ffffff, #fffcf3);
+        }
+
+        .price-label {
+            display: block;
+            margin-bottom: 12px;
+            color: #7d756e;
+            font-size: 17px;
+        }
+
+        #price-value {
+            margin: 0;
+            color: #bd941d;
+            font-size: clamp(32px, 6vw, 58px);
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .info-card {
+            padding: 18px 14px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #eadfca;
+            border-radius: 18px;
+        }
+
+        .info-card p {
+            margin: 0 0 10px;
+            color: #827a73;
+            font-size: 14px;
+        }
+
+        .info-card span {
+            color: #332d25;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        #error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 12px;
+            color: #a12626;
+            background-color: #fff0f0;
+            border: 1px solid #f3c9c9;
+            font-size: 14px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background: #d0ad35;
+            box-shadow: 0 6px 16px rgba(190, 148, 27, 0.22);
+        }
+
+        .btn-primary:hover {
+            background: #b9931d;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            color: #6e5413;
+            background: #fff;
+            border: 1px solid #e4d4ad;
+        }
+
+        .btn-outline:hover {
+            background: #fff9e9;
+        }
+
+        .status {
+            margin: 22px 0 0;
+            color: #8b847d;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 25px auto;
+                padding: 30px 16px 24px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <div class="topbar">
-    <div class="container" style="padding-top:0;padding-bottom:0;">
-      <a href="index.html">← بازگشت به صفحه اصلی</a>
+    <div class="topbar">
+        <a href="./index.html">← بازگشت به صفحه اصلی</a>
     </div>
-  </div>
 
-  <div class="container">
-    <section class="hero">
-      <h1>قیمت لحظه‌ای طلا</h1>
-      <p>
-        این صفحه برای نمایش قیمت لحظه‌ای طلای ۱۸ عیار ساخته شده است.
-        قیمت از API اختصاصی شما دریافت می‌شود.
-      </p>
+    <main class="container">
+        <h1>قیمت لحظه‌ای طلا</h1>
 
-      <div class="price-box">
-        <div class="card big">
-          <div class="label">طلای ۱۸ عیار</div>
-          <div class="value" id="gold18">در حال دریافت...</div>
+        <p class="intro">
+            قیمت لحظه‌ای طلای ۱۸ عیار، به‌صورت خودکار از سامانه قیمت پرنس گلد گالری به‌روزرسانی می‌شود.
+        </p>
+
+        <section class="price-box">
+            <span class="price-label">طلای ۱۸ عیار</span>
+            <h2 id="price-value">در حال دریافت...</h2>
+        </section>
+
+        <section class="info-grid">
+            <div class="info-card">
+                <p>زمان بروزرسانی</p>
+                <span id="update-time">---</span>
+            </div>
+
+            <div class="info-card">
+                <p>واحد قیمت</p>
+                <span id="price-unit">---</span>
+            </div>
+        </section>
+
+        <div id="error-message">
+            دریافت قیمت با خطا مواجه شد. لطفاً چند لحظه دیگر صفحه را دوباره بارگذاری کنید.
         </div>
 
-        <div class="card">
-          <div class="label">زمان بروزرسانی</div>
-          <div class="value" id="updatedAt" style="font-size:1.1rem;color:var(--text)">---</div>
+        <div class="buttons">
+            <a class="btn btn-primary" href="./index.html">بازگشت به گالری</a>
+
+            <!-- در صورت نیاز، آدرس کانال بله را به‌جای # وارد کنید -->
+            <a class="btn btn-outline" href="#" target="_blank" rel="noopener">
+                کانال بله
+            </a>
         </div>
 
-        <div class="card">
-          <div class="label">واحد قیمت</div>
-          <div class="value" id="unit" style="font-size:1.1rem;color:var(--text)">---</div>
-        </div>
-      </div>
+        <p class="status">اطلاعات قیمت در حال دریافت است...</p>
+    </main>
 
-      <div class="actions">
-        <a class="btn btn-primary" href="index.html">بازگشت به گالری</a>
-        <a class="btn btn-secondary" href="https://ble.ir/peransgoldgallery" target="_blank">کانال بله</a>
-      </div>
-
-      <div class="status" id="status">در حال دریافت اطلاعات قیمت...</div>
-    </section>
-  </div>
-
-<script>
-    function toPersianDigits(num) {
-        const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-        return num.toString().replace(/\d/g, x => farsiDigits[x]);
-    }
-
-    function formatPrice(priceStr) {
-        if (!priceStr) return '---';
-        // حذف کاراکترهای غیرعددی احتمالی و تبدیل به عدد
-        const num = parseInt(priceStr.replace(/[^\d]/g, ''), 10);
-        if (isNaN(num)) return '---';
-        // سه رقم سه رقم جدا کردن و تبدیل به اعداد فارسی
-        const formatted = num.toLocaleString('en-US');
-        return toPersianDigits(formatted);
-    }
-
-    async function fetchGoldPrice() {
-        const priceValueEl = document.getElementById('price-value');
-        const updateTimeEl = document.getElementById('update-time');
-        const priceUnitEl = document.getElementById('price-unit');
-        const errorMessageEl = document.getElementById('error-message');
-
-        try {
-            // دریافت فایل قیمت محلی بدون کش
-            const response = await fetch("./price.json", {
-                method: 'GET',
-                cache: 'no-store'
-            });
-
-            if (!response.ok) {
-                throw new Error('عدم دریافت پاسخ مناسب از سرور');
-            }
-
-            const data = await response.json();
-
-            // بررسی فیلدهای فایل price.json
-            if (data && data.price) {
-                priceValueEl.textContent = formatPrice(data.price);
-                priceUnitEl.textContent = data.unit || 'تومان';
-                
-                if (data.updated_at) {
-                    updateTimeEl.textContent = toPersianDigits(data.updated_at);
-                } else {
-                    updateTimeEl.textContent = '---';
-                }
-                
-                errorMessageEl.style.display = 'none';
-            } else {
-                throw new Error('فرمت داده‌های دریافتی معتبر نیست');
-            }
-        } catch (error) {
-            console.error('Gold price error:', error);
-            priceValueEl.textContent = 'خطا در دریافت قیمت';
-            updateTimeEl.textContent = '---';
-            priceUnitEl.textContent = '---';
-            errorMessageEl.style.display = 'block';
-        }
-    }
-
-    // اجرای تابع هنگام بارگذاری صفحه
-    document.addEventListener('DOMContentLoaded', fetchGoldPrice);
-</script>
-
-</body>
-</html>
+    <script>
+        function toPersianDigits(value) {
+            const persianDigits = ['۰', '۱', '۲', '۳', 
