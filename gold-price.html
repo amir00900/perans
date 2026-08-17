@@ -161,46 +161,67 @@
     </section>
   </div>
 
- <script>
-  async function fetchGoldPrice() {
-    const gold18 = document.getElementById('gold18');
-    const updatedAt = document.getElementById('updatedAt');
-    const unit = document.getElementById('unit');
-    const status = document.getElementById('status');
-
-    try {
-      const response = await fetch('https://eojmejm8zxddf8l.m.pipedream.net', {
-        method: 'GET',
-        cache: 'no-store'
-      });
-
-      const rawText = await response.text();
-
-      if (!response.ok) {
-        throw new Error(rawText || 'request failed');
-      }
-
-      const data = JSON.parse(rawText);
-
-      if (!data.price) {
-        throw new Error('price not found');
-      }
-
-      gold18.textContent = Number(data.price).toLocaleString('fa-IR') + ' تومان';
-      unit.textContent = data.unit || 'تومان';
-      updatedAt.textContent = data.updated_at || new Date().toLocaleTimeString('fa-IR');
-      status.textContent = 'اطلاعات با موفقیت دریافت شد.';
-    } catch (error) {
-      gold18.textContent = 'خطا در دریافت قیمت';
-      unit.textContent = '---';
-      updatedAt.textContent = '---';
-      status.textContent = 'قیمت فعلاً قابل دریافت نیست.';
-      console.log('Gold price error:', error);
+<script>
+    function toPersianDigits(num) {
+        const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return num.toString().replace(/\d/g, x => farsiDigits[x]);
     }
-  }
 
-  fetchGoldPrice();
-  setInterval(fetchGoldPrice, 600000);
+    function formatPrice(priceStr) {
+        if (!priceStr) return '---';
+        // حذف کاراکترهای غیرعددی احتمالی و تبدیل به عدد
+        const num = parseInt(priceStr.replace(/[^\d]/g, ''), 10);
+        if (isNaN(num)) return '---';
+        // سه رقم سه رقم جدا کردن و تبدیل به اعداد فارسی
+        const formatted = num.toLocaleString('en-US');
+        return toPersianDigits(formatted);
+    }
+
+    async function fetchGoldPrice() {
+        const priceValueEl = document.getElementById('price-value');
+        const updateTimeEl = document.getElementById('update-time');
+        const priceUnitEl = document.getElementById('price-unit');
+        const errorMessageEl = document.getElementById('error-message');
+
+        try {
+            // دریافت فایل قیمت محلی بدون کش
+            const response = await fetch("./price.json", {
+                method: 'GET',
+                cache: 'no-store'
+            });
+
+            if (!response.ok) {
+                throw new Error('عدم دریافت پاسخ مناسب از سرور');
+            }
+
+            const data = await response.json();
+
+            // بررسی فیلدهای فایل price.json
+            if (data && data.price) {
+                priceValueEl.textContent = formatPrice(data.price);
+                priceUnitEl.textContent = data.unit || 'تومان';
+                
+                if (data.updated_at) {
+                    updateTimeEl.textContent = toPersianDigits(data.updated_at);
+                } else {
+                    updateTimeEl.textContent = '---';
+                }
+                
+                errorMessageEl.style.display = 'none';
+            } else {
+                throw new Error('فرمت داده‌های دریافتی معتبر نیست');
+            }
+        } catch (error) {
+            console.error('Gold price error:', error);
+            priceValueEl.textContent = 'خطا در دریافت قیمت';
+            updateTimeEl.textContent = '---';
+            priceUnitEl.textContent = '---';
+            errorMessageEl.style.display = 'block';
+        }
+    }
+
+    // اجرای تابع هنگام بارگذاری صفحه
+    document.addEventListener('DOMContentLoaded', fetchGoldPrice);
 </script>
 
 </body>
