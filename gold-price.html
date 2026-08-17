@@ -213,8 +213,6 @@
 
         <div class="buttons">
             <a class="btn btn-primary" href="./index.html">بازگشت به گالری</a>
-
-            <!-- در صورت نیاز، آدرس کانال بله را به‌جای # وارد کنید -->
             <a class="btn btn-outline" href="#" target="_blank" rel="noopener">
                 کانال بله
             </a>
@@ -225,4 +223,75 @@
 
     <script>
         function toPersianDigits(value) {
-            const persianDigits = ['۰', '۱', '۲', '۳', 
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return String(value).replace(/\d/g, function (digit) {
+                return persianDigits[digit];
+            });
+        }
+
+        function formatPrice(value) {
+            if (!value) return '---';
+            
+            // تبدیل مقدار به رشته و حذف فواصل یا کاراکترهای اضافه
+            let cleanStr = String(value).replace(/[^\d]/g, '');
+            
+            const numberValue = parseInt(cleanStr, 10);
+            if (isNaN(numberValue) || numberValue <= 0) {
+                return '---';
+            }
+
+            // جدا کردن سه رقم سه رقم و فارسی‌سازی اعداد
+            return toPersianDigits(numberValue.toLocaleString('en-US'));
+        }
+
+        async function fetchGoldPrice() {
+            const priceValueEl = document.getElementById('price-value');
+            const updateTimeEl = document.getElementById('update-time');
+            const priceUnitEl = document.getElementById('price-unit');
+            const errorMessageEl = document.getElementById('error-message');
+            const statusEl = document.querySelector('.status');
+
+            try {
+                // اضافه کردن Timestamp به آخر آدرس برای پیشگیری کامل از کش شدن فایل در مرورگر
+                const response = await fetch('./price.json?nocache=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('فایل price.json یافت نشد. وضعیت: ' + response.status);
+                }
+
+                const data = await response.json();
+
+                if (data && data.price) {
+                    priceValueEl.textContent = formatPrice(data.price);
+                    priceUnitEl.textContent = data.unit || 'تومان';
+                    updateTimeEl.textContent = toPersianDigits(data.updated_at || '---');
+
+                    errorMessageEl.style.display = 'none';
+                    statusEl.textContent = 'قیمت به‌صورت خودکار هر ۳۰ دقیقه به‌روزرسانی می‌شود.';
+                } else {
+                    throw new Error('ساختار فایل price.json معتبر نیست.');
+                }
+
+            } catch (error) {
+                console.error('خطای دریافت قیمت:', error);
+                priceValueEl.textContent = 'عدم دریافت قیمت';
+                updateTimeEl.textContent = '---';
+                priceUnitEl.textContent = '---';
+                errorMessageEl.style.display = 'block';
+                statusEl.textContent = 'خطا در بارگذاری قیمت طلا.';
+            }
+        }
+
+        // اجرای خودکار تابع
+        document.addEventListener('DOMContentLoaded', fetchGoldPrice);
+    </script>
+
+</body>
+</html>
