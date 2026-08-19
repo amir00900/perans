@@ -34,7 +34,7 @@ jobs:
           with open("tgju.json", "r", encoding="utf-8") as file:
               data = json.load(file)
 
-          price_rial = data["current"]["tgju_gold_irg18"]["p"]
+          price_rial = data["current"]["tgju_gold_irg18_buy"]["p"]
           price_toman = int(str(price_rial).replace(",", "")) // 10
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
