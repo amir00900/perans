@@ -1,3 +1,25 @@
+name: Update Gold Price
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-price:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Fetch price and update price.json
         shell: bash
         run: |
@@ -7,7 +29,7 @@
             --retry 3 \
             --connect-timeout 20 \
             --max-time 60 \
-            -A "Mozilla/5.0 (compatible; GoldPriceBot/1.0)" \
+            -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
             "https://www.tgju.org/profile/geram18" \
             --output geram18.html
 
@@ -17,35 +39,54 @@
           from datetime import datetime, timedelta, timezone
           from pathlib import Path
 
-          html = Path("geram18.html").read_text(encoding="utf-8")
+          html = Path("geram18.html").read_text(encoding="utf-8", errors="ignore")
 
-          def normalize_digits(value):
-              translation = str.maketrans({
+          def normalize_text(s: str) -> str:
+              trans = str.maketrans({
                   "۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4",
                   "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9",
                   "٠": "0", "١": "1", "٢": "2", "٣": "3", "٤": "4",
                   "٥": "5", "٦": "6", "٧": "7", "٨": "8", "٩": "9",
+                  "ك": "ک", "ي": "ی",
               })
-              return value.translate(translation)
+              s = s.translate(trans)
+              s = re.sub(r"\s+", " ", s)
+              return s
 
-          text = normalize_digits(html)
-          text = text.replace("ك", "ک").replace("ي", "ی")
-          text = re.sub(r"\s+", " ", text)
+          text = normalize_text(html)
 
-          match = re.search(r"طلا\s*۱۸.*?(\d{3}(?:,\d{3}){2})", text)
-          if not match:
-              match = re.search(r"طلای\s*۱۸.*?(\d{3}(?:,\d{3}){2})", text)
-          if not match:
-              match = re.search(r"(\d{3}(?:,\d{3}){2}).*?طلا\s*۱۸", text)
-          if not match:
-              match = re.search(r"(\d{3}(?:,\d{3}){2}).*?طلای\s*۱۸", text)
+          patterns = [
+              r"طلا\s*18.*?(\d{3}(?:,\d{3}){2})",
+              r"طلای\s*18.*?(\d{3}(?:,\d{3}){2})",
+              r"(\d{3}(?:,\d{3}){2}).*?طلا\s*18",
+              r"(\d{3}(?:,\d{3}){2}).*?طلای\s*18",
+              r"طلا\s*18[^0-9]{0,40}([0-9]{3}(?:,[0-9]{3}){2})",
+              r"طلای\s*18[^0-9]{0,40}([0-9]{3}(?:,[0-9]{3}){2})",
+              r"g?eram18.*?(\d{3}(?:,\d{3}){2})",
+          ]
+
+          match = None
+          for pattern in patterns:
+              m = re.search(pattern, text, re.IGNORECASE)
+              if m:
+                  match = m
+                  break
 
           if not match:
-              print("Could not find a valid 18K gold price in TGJU HTML.")
-              print("HTML length:", len(html))
-              raise SystemExit(1)
+              candidates = []
+              for m in re.finditer(r"\b\d{3}(?:,\d{3}){2}\b", text):
+                  value = int(m.group(0).replace(",", ""))
+                  if 50_000_000 <= value <= 500_000_000:
+                      candidates.append(value)
 
-          price_rial = int(match.group(1).replace(",", ""))
+              if candidates:
+                  price_rial = candidates[0]
+              else:
+                  print("Could not find a valid 18K gold price in TGJU HTML.")
+                  raise SystemExit(1)
+          else:
+              price_rial = int(match.group(1).replace(",", ""))
+
           price_toman = price_rial // 10
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
@@ -66,3 +107,13 @@
           print("Price in toman:", price_toman)
           print(json.dumps(price_data, ensure_ascii=False, indent=2))
           PY
+
+          # حذف فایل موقت
+          rm -f geram18.html
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add price.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update gold price [skip ci]" && git push)
