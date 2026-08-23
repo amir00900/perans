@@ -23,19 +23,89 @@ jobs:
 
           curl --fail --silent --show-error --location \
             --retry 3 \
-            https://call1.tgju.org/ajax.json \
-            --output tgju.json
+            --connect-timeout 20 \
+            --max-time 60 \
+            -A "Mozilla/5.0 (compatible; GoldPriceBot/1.0)" \
+            "https://www.tgju.org/profile/geram18" \
+            --output geram18.html
 
           python3 - <<'PY'
           import json
+          import re
+          import unicodedata
           from datetime import datetime, timedelta, timezone
           from pathlib import Path
 
-          with open("tgju.json", "r", encoding="utf-8") as file:
-              data = json.load(file)
+          html = Path("geram18.html").read_text(encoding="utf-8")
 
-          price_rial = data["current"]["tgju_gold_irg18_buy"]["p"]
-          price_toman = int(str(price_rial).replace(",", "")) // 10
+          def normalize_digits(value):
+              """تبدیل اعداد فارسی و عربی به انگلیسی"""
+              arabic_digits = "٠١٢٣٤٥٦٧٨٩"
+              persian_digits = "۰۱۲۳۴۵۶۷۸۹"
+
+              translation = {}
+              for index, digit in enumerate(arabic_digits):
+                  translation[ord(digit)] = str(index)
+              for index, digit in enumerate(persian_digits):
+                  translation[ord(digit)] = str(index)
+
+              return value.translate(translation)
+
+          def normalize_text(value):
+              value = normalize_digits(value)
+              value = value.replace("ك", "ک").replace("ي", "ی")
+              value = value.replace("\u200c", " ")
+              value = re.sub(r"\s+", " ", value)
+              return value
+
+          normalized_html = normalize_text(html)
+
+          # حذف تگ‌های HTML برای جست‌وجوی متن قابل‌نمایش صفحه
+          visible_text = re.sub(r"<script\b[^>]*>.*?</script>", " ", normalized_html, flags=re.I | re.S)
+          visible_text = re.sub(r"<style\b[^>]*>.*?</style>", " ", visible_text, flags=re.I | re.S)
+          visible_text = re.sub(r"<[^>]+>", " ", visible_text)
+          visible_text = re.sub(r"\s+", " ", visible_text)
+
+          price_rial = None
+
+          # الگوهای اصلی صفحهٔ رسمی TGJU
+          patterns = [
+              # قیمت بعد از عنوان طلای ۱۸
+              r"طلا\s*۱۸.{0,500}?(\d{3}(?:,\d{3}){2,3})",
+              r"طلای\s*۱۸.{0,500}?(\d{3}(?:,\d{3}){2,3})",
+
+              # در بعضی نسخه‌های HTML، قیمت قبل از عنوان قرار دارد
+              r"(\d{3}(?:,\d{3}){2,3}).{0,500}?طلا\s*۱۸",
+              r"(\d{3}(?:,\d{3}){2,3}).{0,500}?طلای\s*۱۸",
+
+              # الگوی رایج داده‌های داخلی صفحه
+              r"geram18.{0,1000}?(\d{8,12})",
+              r"(\d{8,12}).{0,1000}?geram18",
+          ]
+
+          for pattern in patterns:
+              match = re.search(pattern, visible_text, flags=re.IGNORECASE | re.DOTALL)
+              if not match:
+                  match = re.search(pattern, normalized_html, flags=re.IGNORECASE | re.DOTALL)
+
+              if match:
+                  raw_price = normalize_digits(match.group(1))
+                  raw_price = raw_price.replace(",", "").replace(" ", "")
+
+                  if raw_price.isdigit():
+                      candidate = int(raw_price)
+
+                      # قیمت طلای ۱۸ به ریال؛ محدودهٔ محافظ برای جلوگیری از ثبت عدد اشتباه
+                      if 100_000_000 <= candidate <= 500_000_000:
+                          price_rial = candidate
+                          break
+
+          if price_rial is None:
+              print("Could not find a valid 18K gold price in TGJU HTML.")
+              print("HTML length:", len(html))
+              raise SystemExit(1)
+
+          price_toman = price_rial // 10
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
           updated_at = datetime.now(tehran_time).strftime("%Y/%m/%d - %H:%M")
@@ -51,6 +121,8 @@ jobs:
               encoding="utf-8"
           )
 
+          print("Price in rial:", price_rial)
+          print("Price in toman:", price_toman)
           print(json.dumps(price_data, ensure_ascii=False, indent=2))
           PY
 
