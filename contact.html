@@ -8,10 +8,11 @@
     body {
       margin: 0;
       font-family: 'Tahoma', sans-serif;
-      background-color: #f8f9fa; /* رنگ روشن */
-      background-image: url('bg.jpg'); /* اینجا اسم عکس تو */
+      /* آدرس عکس تو */
+      background-image: url('ax/gold-earrings-necklace-geometric-set.webp');
       background-size: cover;
       background-position: center;
+      background-attachment: fixed;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,24 +22,25 @@
     .card {
       width: 100%;
       max-width: 400px;
-      background: rgba(255, 255, 255, 0.85); /* پس‌زمینه شیشه‌ای و روشن */
+      /* تم روشن و لوکس: پس‌زمینه سفیدِ مات */
+      background: rgba(255, 255, 255, 0.9); 
       padding: 30px;
       border-radius: 25px;
       text-align: center;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
-    h1 { font-size: 1.4rem; color: #333; margin-bottom: 25px; }
+    h1 { font-size: 1.5rem; color: #333; margin-bottom: 25px; }
     .btn {
       display: block;
       width: 100%;
       padding: 15px;
       margin-bottom: 15px;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: #fdfdfd;
+      border: 1px solid #e0e0e0;
       border-radius: 15px;
       text-decoration: none;
-      color: #333;
+      color: #444;
       font-weight: 600;
       transition: all 0.3s;
     }
