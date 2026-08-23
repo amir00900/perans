@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ارتباط با ما | پرنس گلد</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
-      font-family: 'Tahoma', sans-serif;
-      /* آدرس عکس تو */
+      font-family: 'Tahoma', system-ui, -apple-system, sans-serif;
       background-image: url('ax/gold-earrings-necklace-geometric-set.webp');
       background-size: cover;
       background-position: center;
@@ -21,40 +23,88 @@
     }
     .card {
       width: 100%;
-      max-width: 400px;
-      /* تم روشن و لوکس: پس‌زمینه سفیدِ مات */
-      background: rgba(255, 255, 255, 0.9); 
-      padding: 30px;
-      border-radius: 25px;
+      max-width: 390px;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 32px 24px;
+      border-radius: 28px;
       text-align: center;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
-    h1 { font-size: 1.5rem; color: #333; margin-bottom: 25px; }
+    h1 {
+      font-size: 1.45rem;
+      color: #222;
+      margin: 0 0 24px 0;
+      font-weight: 700;
+    }
+    .btn-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
     .btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
       width: 100%;
-      padding: 15px;
-      margin-bottom: 15px;
-      background: #fdfdfd;
-      border: 1px solid #e0e0e0;
-      border-radius: 15px;
+      padding: 13px 20px;
+      background: #ffffff;
+      border: 1px solid #e9e9e9;
+      border-radius: 16px;
       text-decoration: none;
-      color: #444;
+      color: #2c3e50;
       font-weight: 600;
-      transition: all 0.3s;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     }
-    .btn:hover { background: #f0f0f0; transform: translateY(-2px); }
+    .btn:hover {
+      background: #f8f9fa;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
+      border-color: #ddd;
+    }
+    .btn img {
+      position: absolute;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .btn span {
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>ارتباط با ما</h1>
-    <a class="btn" href="https://t.me/peransgoldgallery">تلگرام</a>
-    <a class="btn" href="https://ble.ir/peransgoldgallery">بله</a>
-    <a class="btn" href="https://rubika.ir/peransgoldgalery">روبیکا</a>
-    <a class="btn" href="https://instagram.com/peransgoldgallery">اینستاگرام</a>
-    <a class="btn" href="https://wa.me/989374487349">واتساپ</a>
+    <div class="btn-list">
+      <a class="btn" href="https://t.me/peransgoldgallery" target="_blank" rel="noopener noreferrer">
+        <img src="ax/icon/telegram.png" alt="تلگرام" />
+        <span>تلگرام</span>
+      </a>
+      <a class="btn" href="https://ble.ir/peransgoldgallery" target="_blank" rel="noopener noreferrer">
+        <img src="ax/icon/bale.png" alt="بله" />
+        <span>بله</span>
+      </a>
+      <a class="btn" href="https://rubika.ir/peransgoldgalery" target="_blank" rel="noopener noreferrer">
+        <img src="ax/icon/rubika.png" alt="روبیکا" />
+        <span>روبیکا</span>
+      </a>
+      <a class="btn" href="https://instagram.com/peransgoldgallery" target="_blank" rel="noopener noreferrer">
+        <img src="ax/icon/instagram.png" alt="اینستاگرام" />
+        <span>اینستاگرام</span>
+      </a>
+      <a class="btn" href="https://wa.me/989374487349" target="_blank" rel="noopener noreferrer">
+        <img src="ax/icon/whatsapp.png" alt="واتساپ" />
+        <span>واتساپ</span>
+      </a>
+    </div>
   </div>
 </body>
 </html>
