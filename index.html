@@ -5,83 +5,206 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>پرنس گلد گالری</title>
   
-  <!-- اضافه کردن آیکون تب مرورگر -->
+  <!-- آیکون تب مرورگر -->
   <link rel="icon" type="image/png" href="ax/logo.png">
   
   <style>
-    :root{ --bg:#fdfdfd; --gold:#d4af37; --text:#333; }
-    body{margin:0; font-family: Tahoma, sans-serif; background:var(--bg);}
-    .container{max-width:1200px; margin:0 auto; padding:0 20px}
+    :root { 
+      --bg: #fdfdfd; 
+      --gold: #d4af37; 
+      --text: #333; 
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
 
-    /* نوار تماس */
-    .top-bar { background: #eee; padding: 5px 20px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
-    .top-bar a { color: var(--text); text-decoration: none; margin-left: 10px; }
+    body {
+      margin: 0; 
+      font-family: Tahoma, sans-serif; 
+      background: var(--bg);
+    }
 
-    /* نوار قیمت */
-    .gold-ticker { background: #fdfaf5; color: #8b7355; padding: 8px 0; text-align: center; border-bottom: 1px solid #e5dcc3; font-size: 0.8rem; }
-    .gold-ticker a { color: inherit; text-decoration: none; }
+    .container {
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 0 20px;
+    }
 
-    /* بنر تمام‌صفحه */
-    .hero-full { height: 90vh; background: url('ax/gold-jewelry-collection-hero.webp') no-repeat center center; background-size: cover; display: flex; flex-direction: column; }
+    /* نوار بالای صفحه (شماره تماس) */
+    .top-bar { 
+      background: #f4f4f4; 
+      padding: 7px 20px; 
+      font-size: 0.8rem; 
+      text-align: center; 
+      color: #555;
+      letter-spacing: 0.5px;
+    }
 
-    /* هدر */
-    .header-nav { display: flex; align-items: center; padding: 20px 0; color: white; gap: 15px; }
-    .logo-area { display: flex; align-items: center; gap: 15px; font-size: 1.2rem; font-weight: bold; }
-    .logo-area img { width: 60px; border-radius: 15px; border: 2px solid white; }
+    /* نوار قیمت لحظه‌ای */
+    .gold-ticker { 
+      background: #fdfaf5; 
+      color: #8b7355; 
+      padding: 9px 0; 
+      text-align: center; 
+      border-bottom: 1px solid #e5dcc3; 
+      font-size: 0.85rem; 
+    }
+    .gold-ticker a { 
+      color: inherit; 
+      text-decoration: none; 
+      font-weight: 500;
+    }
 
-    /* کادر متن بنر */
-    .hero-content { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
-    .hero-box { background: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 20px; max-width: 450px; text-align: right; }
-    .hero-box h1 { margin-top: 0; color: #222; }
-    .hero-box p { color: #555; line-height: 1.9; }
-    .btn-gold { background: var(--gold); color: #fff; padding: 12px 30px; border-radius: 8px; display: inline-block; font-weight: bold; margin-top: 20px; text-decoration: none; }
+    /* بنر اصلی تمام‌صفحه */
+    .hero-full { 
+      min-height: 88vh; 
+      background: url('ax/gold-jewelry-collection-hero.webp') no-repeat center center; 
+      background-size: cover; 
+      display: flex; 
+      flex-direction: column; 
+    }
+
+    /* هدر و لوگو */
+    .header-nav { 
+      display: flex; 
+      align-items: center; 
+      padding: 20px 0; 
+      color: white; 
+      gap: 15px; 
+    }
+    .logo-area { 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; 
+      font-size: 1.25rem; 
+      font-weight: bold; 
+    }
+    .logo-area img { 
+      width: 58px; 
+      height: 58px;
+      object-fit: cover;
+      border-radius: 14px; 
+      border: 2px solid rgba(255, 255, 255, 0.9); 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* کادر معرفی روی بنر */
+    .hero-content { 
+      flex: 1; 
+      display: flex; 
+      align-items: center; 
+      justify-content: flex-start; 
+      padding: 40px 0;
+    }
+    .hero-box { 
+      background: rgba(255, 255, 255, 0.92); 
+      padding: 38px 32px; 
+      border-radius: 24: var(--gold); 
+      color: #fff; 
+      padding: 12px 28px;-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .hero-box h1 { 
+      margin-top: 0; 
+      color: #1a1a1a; 
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .hero-box p { 
+      color: #555; 
+      line-height: 1.9; 
+      margin-bottom: 22px;
+      font-size: 0.98rem;
+    }
+    .btn-gold { 
+      background: var(--gold); 
+      color: #fff; 
+      padding: 12px 28px; 
+      border-radius: 12px; 
+      display: inline-block; 
+      font-weight: bold; 
+      text-decoration: none; 
+      transition: background 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+    }
+    .btn-gold:hover {
+      background: #c59f2d;
+      transform: translateY(-2px);
+    }
+
+    /* دکمه شناور ارتباط با ما */
+    .floating-contact-btn {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #2c3e50;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 50px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: all 0.25s ease;
+      z-index: 9999;
+    }
+    .floating-contact-btn:hover {
+      background: #ffffff;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(212, 175, 55, 0.28);
+      border-color: #d4af37;
+      color: #111;
+    }
+    .floating-contact-btn svg {
+      stroke: #b8972e;
+    }
 
     @media (max-width: 768px) {
-      .top-bar {
-        flex-direction: column;
-        gap: 6px;
-        text-align: center;
-      }
-
       .hero-full {
-        height: auto;
-        min-height: 90vh;
+        min-height: 85vh;
       }
-
-      .hero-content {
-        padding: 40px 0;
-      }
-
       .hero-box {
-        padding: 28px 20px;
+        padding: 26px 20px;
         max-width: 100%;
+      }
+      .floating-contact-btn {
+        bottom: 18px;
+        left: 18px;
+        padding: 10px 16px;
+        font-size: 0.88rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- نوار تماس -->
+  <!-- نوار بالای صفحه -->
   <div class="top-bar">
-    <div>تلفن سفارش: ۰۹۳۷۴۴۸۷۳۴۹</div>
-    <div>
-      <a href="https://www.instagram.com/peransgoldgallery">اینستاگرام</a>
-      <a href="https://ble.ir/peransgoldgallery">بله</a>
-      <a href="https://wa.me/989374487349">واتس‌اپ</a>
-    </div>
+    <span>تلفن سفارش و پشتیبانی: ۰۹۳۷۴۴۸۷۳۴۹</span>
   </div>
 
-  <!-- نوار قیمت -->
+  <!-- نوار قیمت لحظه‌ای طلا -->
   <div class="gold-ticker">
-    <a href="gold-price.html">نرخ لحظه‌ای طلای ۱۸ عیار: <span id="goldPrice">در حال دریافت...</span></a>
+    <a href="gold-price.html">
+      نرخ لحظه‌ای طلای ۱۸ عیار: <span id="goldPrice">در حال دریافت...</span>
+    </a>
   </div>
 
-  <!-- بنر -->
+  <!-- بخش بنر اصلی -->
   <section class="hero-full">
     <div class="container">
       <header class="header-nav">
         <div class="logo-area">
-          <img src="ax/logo.png" alt="Logo">
+          <img src="ax/logo.png" alt="پرنس گلد">
           <span>گالری پرنس</span>
         </div>
       </header>
@@ -90,12 +213,21 @@
         <div class="hero-box">
           <h1>پرنس گلد گالری</h1>
           <p>مناسب هدیه و سرمایه‌گذاری؛ زیبایی در سادگی.</p>
-          <a href="https://ble.ir/peransgoldgallery" class="btn-gold">مشاهده محصولات</a>
+          <a href="contact.html" class="btn-gold">مشاهده راه‌های ارتباطی</a>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- دکمه شناور ارتباط با ما -->
+  <a href="contact.html" class="floating-contact-btn" title="ارتباط با ما">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+    <span>ارتباط با ما</span>
+  </a>
+
+  <!-- اسکریپت به‌روزرسانی قیمت طلا -->
   <script>
     function toPersianDigits(value) {
       const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -151,52 +283,6 @@
     fetchGoldPrice();
     setInterval(fetchGoldPrice, 600000);
   </script>
-
-  <!-- دکمه شناور ارتباط با ما -->
-<a href="contact.html" class="floating-contact-btn" title="ارتباط با ما">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-  </svg>
-  <span>ارتباط با ما</span>
-</a>
-
-<style>
-.floating-contact-btn {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #2c3e50;
-  text-decoration: none;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 50px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.25s ease;
-  z-index: 9999;
-}
-
-.floating-contact-btn:hover {
-  background: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(212, 175, 55, 0.25);
-  border-color: #d4af37;
-  color: #111;
-}
-
-.floating-contact-btn svg {
-  stroke: #b8972e;
-}
-</style>
-
 
 </body>
 </html>
