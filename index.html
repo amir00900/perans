@@ -6,15 +6,17 @@
   <title>پرنس گلد گالری | Perans Gold Gallery</title>
   <link rel="icon" type="image/png" href="ax/logo.png">
   
-  <!-- وب‌فونت وزیرمتن و فونت نستعلیق استاندارد وب -->
+  <!-- فونت‌های استاندارد وب برای دسکتاپ و موبایل -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
-  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/lalezar-font@v1.0.0/dist/font-face.css">
+
   <style>
     @font-face {
-      font-family: 'IranNastaliq';
+      font-family: 'IranNastaliqWeb';
       src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff2') format('woff2'),
-           url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff') format('woff');
+           url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff') format('woff'),
+           url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
       font-display: swap;
@@ -192,9 +194,9 @@
       display: block;
     }
 
-    /* تایپوگرافی خوشنویسی طلایی */
+    /* عنوان خوشنویسی برند با لود مطمئن */
     .brand-title {
-      font-family: 'IranNastaliq', 'Vazirmatn', Tahoma, sans-serif;
+      font-family: 'IranNastaliqWeb', 'IranNastaliq', 'Lalezar', 'Vazirmatn', Tahoma, sans-serif !important;
       font-size: 44px;
       font-weight: normal;
       line-height: 1.8;
@@ -206,6 +208,7 @@
       text-shadow: 0 2px 10px rgba(197, 160, 89, 0.2);
       letter-spacing: 0;
       padding: 0 10px;
+      display: block;
     }
 
     .brand-subtitle {
@@ -292,7 +295,7 @@
       border-color: rgba(197, 160, 89, 0.5);
     }
 
-    /* فوتر مینیمال لوکس */
+    /* فوتر مینیمال */
     .site-footer {
       width: 100%;
       padding: 20px 16px 26px;
@@ -310,7 +313,7 @@
       line-height: 1.8;
     }
 
-    /* واکنش‌گرایی موبایل */
+    /* بهینه‌سازی دقیق موبایل */
     @media (max-width: 600px) {
       .hero-container {
         padding: 16px 14px 32px;
@@ -332,7 +335,7 @@
       }
 
       .brand-title {
-        font-size: 34px;
+        font-size: 36px !important;
         line-height: 1.75;
       }
 
@@ -363,7 +366,7 @@
 </head>
 <body>
 
-  <!-- نوار نرخ طلا -->
+  <!-- نوار نرخ لحظه‌ای طلا -->
   <div class="gold-ticker">
     <a href="gold-price.html" title="مشاهده نمودار و جزئیات قیمت">
       <span class="live-dot"></span>
@@ -373,7 +376,7 @@
     </a>
   </div>
 
-  <!-- کادر اصلی معرفی -->
+  <!-- کادر اصلی -->
   <main class="hero-container">
     <div class="hero-card">
       <div class="hero-image-wrapper">
