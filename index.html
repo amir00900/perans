@@ -6,10 +6,24 @@
   <title>پرنس گلد گالری | Perans Gold Gallery</title>
   <link rel="icon" type="image/png" href="ax/logo.png">
   
+  <!-- فونت نستعلیق و وب‌فونت خوانا -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+  
   <style>
+    @font-face {
+      font-family: 'IranNastaliq';
+      src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff2') format('woff2'),
+           url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --bg-main: #fcfbfa;
       --gold-primary: #c5a059;
+      --gold-dark: #96702d;
       --gold-hover: #b08b44;
       --gold-light: #f9f5ed;
       --gold-border: rgba(197, 160, 89, 0.25);
@@ -31,7 +45,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Vazirmatn", Tahoma, sans-serif;
+      font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma, sans-serif;
       background-color: var(--bg-main);
       color: var(--text-dark);
       min-height: 100vh;
@@ -94,7 +108,7 @@
       margin: 0 4px;
     }
 
-    /* کادر بدنه اصلی سایت */
+    /* کادر بدنه اصلی */
     .hero-container {
       width: 100%;
       max-width: 1100px;
@@ -136,7 +150,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0.95) 100%);
     }
 
-    /* محتوای متنی و دکمه‌ها */
+    /* بخش معرفی برند */
     .hero-content {
       padding: 0 30px 36px;
       margin-top: -65px;
@@ -159,7 +173,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
       overflow: hidden;
     }
 
@@ -170,20 +184,29 @@
       display: block;
     }
 
+    /* استایل خطاطی و عنوان طلایی لوکس */
     .brand-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text-dark);
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
+      font-family: 'IranNastaliq', 'Vazirmatn', Tahoma, sans-serif;
+      font-size: 42px;
+      font-weight: normal;
+      line-height: 1.8;
+      margin-bottom: 2px;
+      color: #b08738;
+      background: linear-gradient(135deg, #dfba73 0%, #b88d3e 40%, #7e5a1b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 8px rgba(197, 160, 89, 0.25);
+      letter-spacing: 0;
+      padding: 0 10px;
     }
 
     .brand-subtitle {
-      font-size: 15px;
+      font-size: 14.5px;
       color: var(--text-muted);
-      max-width: 500px;
+      max-width: 520px;
       margin-bottom: 28px;
       font-weight: 400;
+      line-height: 1.7;
     }
 
     .actions-group {
@@ -209,6 +232,7 @@
       box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
       transition: all 0.25s ease;
       border: none;
+      font-family: inherit;
     }
 
     .btn-primary:hover {
@@ -230,6 +254,7 @@
       justify-content: center;
       border: 1px solid var(--gold-border);
       transition: all 0.25s ease;
+      font-family: inherit;
     }
 
     .btn-secondary:hover {
@@ -238,7 +263,7 @@
       transform: translateY(-2px);
     }
 
-    /* فوتر بدون شماره تلفن */
+    /* فوتر */
     .site-footer {
       width: 100%;
       padding: 18px 16px 24px;
@@ -256,7 +281,7 @@
       line-height: 1.8;
     }
 
-    /* واکنش‌گرایی موبایل */
+    /* موبایل */
     @media (max-width: 600px) {
       .hero-container {
         padding: 15px 14px 30px;
@@ -274,15 +299,16 @@
       .brand-logo-wrapper {
         width: 84px;
         height: 84px;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .brand-title {
-        font-size: 22px;
+        font-size: 34px;
+        line-height: 1.7;
       }
 
       .brand-subtitle {
-        font-size: 13.5px;
+        font-size: 13px;
         margin-bottom: 22px;
       }
 
@@ -330,8 +356,9 @@
         <div class="brand-logo-wrapper">
           <img src="ax/logo.png" alt="لوگوی پرنس گلد">
         </div>
+        
         <h1 class="brand-title">پرنس گلد گالری</h1>
-        <p class="brand-subtitle"> طلا های مینیمال مناسب هدیه و سرمایه‌گذاری؛ درخشش زیبایی در نهایت ظرافت و سادگی </p>
+        <p class="brand-subtitle">طلا های مینیمال مناسب هدیه و سرمایه‌گذاری؛ درخشش زیبایی در نهایت ظرافت و سادگی</p>
         
         <div class="actions-group">
           <a href="https://ble.ir/peransgoldgallery" class="btn-primary" target="_blank" rel="noopener noreferrer">
