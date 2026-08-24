@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>پرنس گلد گالری | Perans Gold Gallery</title>
   <link rel="icon" type="image/png" href="ax/logo.png">
-  
-  <!-- فونت‌های استاندارد وب برای دسکتاپ و موبایل -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/lalezar-font@v1.0.0/dist/font-face.css">
 
+  <!-- ایمپورت مستقیم و مطمئن فونت‌ها -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+  
   <style>
+    /* فونت نستعلیق استاندارد وب با تمام فرمت‌های پشتیبانی موبایل */
     @font-face {
-      font-family: 'IranNastaliqWeb';
+      font-family: 'IranNastaliq';
       src: url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff2') format('woff2'),
            url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.woff') format('woff'),
            url('https://cdn.jsdelivr.net/gh/rastikerdar/iran-nastaliq-font@v1.0.0/dist/IranNastaliq.ttf') format('truetype');
@@ -47,7 +46,7 @@
     }
 
     body {
-      font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma, sans-serif;
+      font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-main);
       color: var(--text-dark);
       min-height: 100vh;
@@ -194,19 +193,17 @@
       display: block;
     }
 
-    /* عنوان خوشنویسی برند با لود مطمئن */
+    /* عنوان طلایی نستعلیق */
     .brand-title {
-      font-family: 'IranNastaliqWeb', 'IranNastaliq', 'Lalezar', 'Vazirmatn', Tahoma, sans-serif !important;
-      font-size: 44px;
+      font-family: 'IranNastaliq', cursive, serif !important;
+      font-size: 46px;
       font-weight: normal;
-      line-height: 1.8;
-      margin-bottom: 4px;
-      color: #b08738;
+      line-height: 2;
+      margin-bottom: 2px;
+      color: #9e7529;
       background: linear-gradient(135deg, #d8b267 0%, #b88d3e 40%, #7e5a1b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 10px rgba(197, 160, 89, 0.2);
-      letter-spacing: 0;
       padding: 0 10px;
       display: block;
     }
@@ -295,7 +292,7 @@
       border-color: rgba(197, 160, 89, 0.5);
     }
 
-    /* فوتر مینیمال */
+    /* فوتر */
     .site-footer {
       width: 100%;
       padding: 20px 16px 26px;
@@ -313,7 +310,7 @@
       line-height: 1.8;
     }
 
-    /* بهینه‌سازی دقیق موبایل */
+    /* بهینه‌سازی موبایل */
     @media (max-width: 600px) {
       .hero-container {
         padding: 16px 14px 32px;
@@ -331,12 +328,12 @@
       .brand-logo-wrapper {
         width: 86px;
         height: 86px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
       }
 
       .brand-title {
-        font-size: 36px !important;
-        line-height: 1.75;
+        font-size: 38px !important;
+        line-height: 1.9;
       }
 
       .brand-subtitle {
@@ -404,12 +401,10 @@
     </div>
   </main>
 
-  <!-- فوتر ساده و لوکس بدون شماره -->
   <footer class="site-footer">
     <p>گالری طلا و جواهر پرنس</p>
   </footer>
 
-  <!-- اسکریپت دریافت قیمت لحظه‌ای طلا -->
   <script>
     function toPersianDigits(n) {
       if (n === null || n === undefined) return '';
