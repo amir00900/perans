@@ -1,276 +1,403 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>پرنس گلد گالری</title>
-  
-  <!-- آیکون تب مرورگر -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پرنس گلد گالری | Perans Gold Gallery</title>
   <link rel="icon" type="image/png" href="ax/logo.png">
   
   <style>
-    :root { 
-      --bg: #fdfdfd; 
-      --gold: #d4af37; 
-      --text: #333; 
+    :root {
+      --bg-main: #fcfbfa;
+      --gold-primary: #c5a059;
+      --gold-hover: #b08b44;
+      --gold-light: #f9f5ed;
+      --gold-border: rgba(197, 160, 89, 0.25);
+      --text-dark: #222222;
+      --text-muted: #666666;
+      --glass-bg: rgba(255, 255, 255, 0.88);
+      --glass-border: rgba(255, 255, 255, 0.95);
+      --shadow-luxury: 0 20px 40px -15px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(197, 160, 89, 0.15);
     }
-    
+
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      margin: 0; 
-      font-family: Tahoma, sans-serif; 
-      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Vazirmatn", Tahoma, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.6;
     }
 
-    .container {
-      max-width: 1200px; 
-      margin: 0 auto; 
-      padding: 0 20px;
+    /* نوار قیمت طلا */
+    .gold-ticker {
+      width: 100%;
+      background: #ffffff;
+      border-bottom: 1px solid var(--gold-border);
+      padding: 10px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
 
-   
-
-    /* نوار قیمت لحظه‌ای */
-    .gold-ticker { 
-      background: #fdfaf5; 
-      color: #8b7355; 
-      padding: 9px 0; 
-      text-align: center; 
-      border-bottom: 1px solid #e5dcc3; 
-      font-size: 0.85rem; 
-    }
-    .gold-ticker a { 
-      color: inherit; 
-      text-decoration: none; 
+    .gold-ticker a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 13.5px;
       font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: color 0.2s ease;
     }
 
-    /* بنر اصلی تمام‌صفحه */
-    .hero-full { 
-      min-height: 88vh; 
-      background: url('ax/gold-jewelry-collection-hero.webp') no-repeat center center; 
-      background-size: cover; 
-      display: flex; 
-      flex-direction: column; 
+    .gold-ticker a:hover {
+      color: var(--gold-hover);
     }
 
-    /* هدر و لوگو */
-    .header-nav { 
-      display: flex; 
-      align-items: center; 
-      padding: 20px 0; 
-      color: white; 
-      gap: 15px; 
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #2e7d32;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.18);
+      animation: pulse 2s infinite;
     }
-    .logo-area { 
-      display: flex; 
-      align-items: center; 
-      gap: 15px; 
-      font-size: 1.25rem; 
-      font-weight: bold; 
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(46, 125, 50, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
     }
-    .logo-area img { 
-      width: 58px; 
-      height: 58px;
+
+    .price-val {
+      font-weight: 700;
+      color: var(--gold-primary);
+      margin: 0 4px;
+    }
+
+    /* بخش اصلی Hero */
+    .hero-container {
+      width: 100%;
+      max-width: 1100px;
+      padding: 30px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-card {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow-luxury);
+      border: 1px solid var(--gold-border);
+      position: relative;
+    }
+
+    .hero-image-wrapper {
+      width: 100%;
+      height: 380px;
+      position: relative;
+      background-color: #f0ede6;
+    }
+
+    .hero-image-wrapper img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border-radius: 14px; 
-      border: 2px solid rgba(255, 255, 255, 0.9); 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      display: block;
     }
 
-    /* کادر معرفی روی بنر */
-    .hero-content { 
-      flex: 1; 
-      display: flex; 
-      align-items: center; 
-      justify-content: flex-start; 
-      padding: 40px 0;
+    .hero-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0.95) 100%);
     }
-    .hero-box { 
-      background: rgba(255, 255, 255, 0.92); 
-      padding: 38px 32px; 
-      border-radius: 24: var(--gold); 
-      color: #fff; 
-      padding: 12px 28px;-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+
+    /* کادر محتوای لوکس */
+    .hero-content {
+      padding: 0 30px 40px;
+      margin-top: -65px;
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .hero-box h1 { 
-      margin-top: 0; 
-      color: #1a1a1a; 
-      font-size: 1.6rem;
-      margin-bottom: 12px;
+
+    .brand-logo-wrapper {
+      width: 100px;
+      height: 100px;
+      background: #ffffff;
+      border-radius: 50%;
+      padding: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border: 2px solid var(--gold-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
     }
-    .hero-box p { 
-      color: #555; 
-      line-height: 1.9; 
-      margin-bottom: 22px;
-      font-size: 0.98rem;
+
+    .brand-logo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
-    .btn-gold { 
-      background: var(--gold); 
-      color: #fff; 
-      padding: 12px 28px; 
-      border-radius: 12px; 
-      display: inline-block; 
-      font-weight: bold; 
-      text-decoration: none; 
-      transition: background 0.2s ease, transform 0.2s ease;
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
     }
-    .btn-gold:hover {
-      background: #c59f2d;
+
+    .brand-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+
+    /* دکمه‌های اقدام (Action Buttons) */
+    .actions-group {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      max-width: 440px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      flex: 1.2;
+      background: linear-gradient(135deg, var(--gold-primary) 0%, #a8823b 100%);
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
+      transition: all 0.25s ease;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(197, 160, 89, 0.4);
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: var(--gold-light);
+      color: var(--gold-hover);
+      padding: 14px 20px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--gold-border);
+      transition: all 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #f3ebd9;
+      color: var(--text-dark);
       transform: translateY(-2px);
     }
 
-    /* دکمه شناور ارتباط با ما */
+    /* دکمه شناور ارتباط */
     .floating-contact-btn {
       position: fixed;
       bottom: 24px;
       left: 24px;
+      width: 52px;
+      height: 52px;
+      background: #ffffff;
+      border: 1px solid var(--gold-border);
+      border-radius: 50%;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(212, 175, 55, 0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #2c3e50;
+      justify-content: center;
+      color: var(--gold-primary);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      border-radius: 50px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      transition: all 0.25s ease;
-      z-index: 9999;
-    }
-    .floating-contact-btn:hover {
-      background: #ffffff;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 28px rgba(212, 175, 55, 0.28);
-      border-color: #d4af37;
-      color: #111;
-    }
-    .floating-contact-btn svg {
-      stroke: #b8972e;
+      z-index: 999;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @media (max-width: 768px) {
-      .hero-full {
-        min-height: 85vh;
+    .floating-contact-btn:hover {
+      transform: scale(1.08);
+      background: var(--gold-primary);
+      color: #ffffff;
+    }
+
+    .floating-contact-btn svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2;
+    }
+
+    /* نسخه موبایل */
+    @media (max-width: 600px) {
+      .hero-container {
+        padding: 15px 14px 70px;
       }
-      .hero-box {
-        padding: 26px 20px;
-        max-width: 100%;
+      .hero-image-wrapper {
+        height: 250px;
+      }
+      .hero-content {
+        padding: 0 16px 28px;
+        margin-top: -50px;
+      }
+      .brand-logo-wrapper {
+        width: 84px;
+        height: 84px;
+        margin-bottom: 12px;
+      }
+      .brand-title {
+        font-size: 22px;
+      }
+      .brand-subtitle {
+        font-size: 13.5px;
+        margin-bottom: 22px;
+      }
+      .actions-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        padding: 13px;
+        font-size: 14.5px;
       }
       .floating-contact-btn {
         bottom: 18px;
         left: 18px;
-        padding: 10px 16px;
-        font-size: 0.88rem;
+        width: 48px;
+        height: 48px;
       }
     }
   </style>
 </head>
 <body>
 
- 
-  <!-- نوار قیمت لحظه‌ای طلا -->
+  <!-- نوار نرخ طلای ۱۸ عیار -->
   <div class="gold-ticker">
-    <a href="gold-price.html">
-      نرخ لحظه‌ای طلای ۱۸ عیار: <span id="goldPrice">در حال دریافت...</span>
+    <a href="gold-price.html" title="مشاهده نمودار و جزئیات قیمت">
+      <span class="live-dot"></span>
+      <span>نرخ لحظه‌ای طلای ۱۸ عیار:</span>
+      <span id="goldPrice" class="price-val">در حال دریافت...</span>
+      <span>تومان</span>
     </a>
   </div>
 
-  <!-- بخش بنر اصلی -->
-  <section class="hero-full">
-    <div class="container">
-      <header class="header-nav">
-        <div class="logo-area">
-          <img src="ax/logo.png" alt="پرنس گلد">
-          <span>گالری پرنس</span>
-        </div>
-      </header>
-
+  <!-- کادر اصلی معرفی گالری -->
+  <main class="hero-container">
+    <div class="hero-card">
+      <div class="hero-image-wrapper">
+        <img src="ax/gold-jewelry-collection-hero.webp" alt="مجموعه جواهرات پرنس گلد">
+        <div class="hero-image-overlay"></div>
+      </div>
+      
       <div class="hero-content">
-        <div class="hero-box">
-          <h1>پرنس گلد گالری</h1>
-          <p>مناسب هدیه و سرمایه‌گذاری؛ زیبایی در سادگی.</p>
-          <a href="contact.html" class="btn-gold">مشاهده راه‌های ارتباطی</a>
+        <div class="brand-logo-wrapper">
+          <img src="ax/logo.png" alt="لوگوی پرنس گلد">
+        </div>
+        <h1 class="brand-title">پرنس گلد گالری</h1>
+        <p class="brand-subtitle">مناسب هدیه و سرمایه‌گذاری؛ درخشش زیبایی در نهایت ظرافت و سادگی.</p>
+        
+        <div class="actions-group">
+          <a href="https://ble.ir/peransgoldgallery" class="btn-primary">
+            مشاهده محصولات
+          </a>
+          <a href="contact.html" class="btn-secondary">
+            راه‌های ارتباطی
+          </a>
         </div>
       </div>
     </div>
-  </section>
+  </main>
 
   <!-- دکمه شناور ارتباط با ما -->
   <a href="contact.html" class="floating-contact-btn" title="ارتباط با ما">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
     </svg>
-    <span>ارتباط با ما</span>
   </a>
 
-  <!-- اسکریپت به‌روزرسانی قیمت طلا -->
+  <!-- اسکریپت دریافت قیمت طلا -->
   <script>
-    function toPersianDigits(value) {
-      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-      return String(value).replace(/\d/g, function(digit) {
-        return persianDigits[digit];
+    function toPersianDigits(n) {
+      if (n === null || n === undefined) return '';
+      const f = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      return n.toString().replace(/[0-9]/g, function(w) {
+        return f[+w];
       });
     }
 
-    function formatPrice(value) {
-      const numberValue = parseInt(String(value).replace(/[^\d]/g, ''), 10);
-      if (isNaN(numberValue) || numberValue <= 0) {
-        return null;
-      }
-      return toPersianDigits(numberValue.toLocaleString('en-US')) + ' تومان';
+    function formatPrice(val) {
+      if (!val) return 'استعلام قیمت';
+      const num = parseInt(val, 10);
+      if (isNaN(num)) return 'استعلام قیمت';
+      return toPersianDigits(num.toLocaleString('fa-IR'));
     }
 
     async function fetchGoldPrice() {
-      const display = document.getElementById('goldPrice');
+      const priceEl = document.getElementById('goldPrice');
+      const cached = localStorage.getItem('last_gold_price');
+      if (cached && priceEl && priceEl.innerText === 'در حال دریافت...') {
+        priceEl.innerText = formatPrice(cached);
+      }
 
       try {
-        const response = await fetch('./price.json?nocache=' + Date.now(), {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('price.json not found: ' + response.status);
+        const res = await fetch('./price.json?nocache=' + Date.now());
+        if (!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        
+        let p = null;
+        if (typeof data.gold_18k === 'number') p = data.gold_18k;
+        else if (data.gold_18k && data.gold_18k.price) p = data.gold_18k.price;
+        else if (data.price) p = data.price;
+        
+        if (p && priceEl) {
+          priceEl.innerText = formatPrice(p);
+          localStorage.setItem('last_gold_price', p);
         }
-
-        const data = await response.json();
-
-        if (data && data.price) {
-          const formatted = formatPrice(data.price);
-          if (!formatted) {
-            throw new Error('Invalid price format');
-          }
-
-          display.textContent = formatted;
-          localStorage.setItem('last_gold_price', formatted);
-        } else {
-          throw new Error('Invalid JSON structure');
+      } catch (e) {
+        if (!cached && priceEl) {
+          priceEl.innerText = 'استعلام قیمت';
         }
-      } catch (error) {
-        console.error('Error updating top bar price:', error);
-        display.textContent = localStorage.getItem('last_gold_price') || 'استعلام قیمت';
       }
     }
 
     fetchGoldPrice();
     setInterval(fetchGoldPrice, 600000);
   </script>
-
 </body>
 </html>
