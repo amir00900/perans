@@ -41,7 +41,7 @@
       line-height: 1.6;
     }
 
-    /* نوار قیمت طلا */
+    /* نوار نرخ لحظه‌ای طلا */
     .gold-ticker {
       width: 100%;
       background: #ffffff;
@@ -51,30 +51,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-
-    .gold-ticker a {
-      text-decoration: none;
-      color: var(--text-dark);
-      font-size: 13.5px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: color 0.2s ease;
-      flex-wrap: wrap;
-    }
-
-    .gold-ticker a:hover {
-      color: var(--gold-hover);
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
     .gold-ticker a {
@@ -117,24 +94,49 @@
       margin: 0 4px;
     }
 
-    /* بخش اصلی Hero */
+    /* کادر بدنه اصلی سایت */
     .hero-container {
       width: 100%;
       max-width: 1100px;
       padding: 30px 20px 40px;
       display: flex;
       flex-direction: column;
-      align-fit: cover;
+      align-items: center;
+      flex: 1;
+    }
+
+    .hero-card {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow-luxury);
+      border: 1px solid var(--gold-border);
+      position: relative;
+    }
+
+    .hero-image-wrapper {
+      width: 100%;
+      height: 380px;
+      position: relative;
+      background-color: #f0ede6;
+      overflow: hidden;
+    }
+
+    .hero-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
     }
 
     .hero-image-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0.95) 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0.95) 100%);
     }
 
-    /* کادر محتوای لوکس */
+    /* محتوای متنی و دکمه‌ها */
     .hero-content {
       padding: 0 30px 36px;
       margin-top: -65px;
@@ -179,12 +181,11 @@
     .brand-subtitle {
       font-size: 15px;
       color: var(--text-muted);
-      max-width: 480px;
+      max-width: 500px;
       margin-bottom: 28px;
       font-weight: 400;
     }
 
-    /* دکمه‌های اقدام */
     .actions-group {
       display: flex;
       gap: 14px;
@@ -237,7 +238,7 @@
       transform: translateY(-2px);
     }
 
-    /* فوتر */
+    /* فوتر بدون شماره تلفن */
     .site-footer {
       width: 100%;
       padding: 18px 16px 24px;
@@ -255,14 +256,14 @@
       line-height: 1.8;
     }
 
-    /* نسخه موبایل */
+    /* واکنش‌گرایی موبایل */
     @media (max-width: 600px) {
       .hero-container {
         padding: 15px 14px 30px;
       }
 
       .hero-image-wrapper {
-        height: 250px;
+        height: 240px;
       }
 
       .hero-content {
@@ -307,7 +308,7 @@
 </head>
 <body>
 
-  <!-- نوار نرخ طلای ۱۸ عیار -->
+  <!-- نوار نرخ طلا -->
   <div class="gold-ticker">
     <a href="gold-price.html" title="مشاهده نمودار و جزئیات قیمت">
       <span class="live-dot"></span>
@@ -317,7 +318,7 @@
     </a>
   </div>
 
-  <!-- کادر اصلی معرفی گالری -->
+  <!-- کادر اصلی معرفی -->
   <main class="hero-container">
     <div class="hero-card">
       <div class="hero-image-wrapper">
