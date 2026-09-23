@@ -15,8 +15,6 @@
             --ink: #30291f;
             --muted: #81796e;
             --line: #e8ddc7;
-            --paper: #fbf9f4;
-            --white: #fffefa;
             --green: #568a55;
             --red: #bd4840;
         }
@@ -31,7 +29,12 @@
             color: var(--ink);
             font-family: Tahoma, Arial, sans-serif;
             background:
-                linear-gradient(90deg, rgba(247, 242, 232, 0.15), rgba(251, 249, 244, 0.94) 43%, #fbf9f4 100%),
+                linear-gradient(
+                    90deg,
+                    rgba(247, 242, 232, 0.15),
+                    rgba(251, 249, 244, 0.94) 43%,
+                    #fbf9f4 100%
+                ),
                 url("./ax/gold-price-bg.webp") left center / cover fixed no-repeat,
                 #f4eee2;
         }
@@ -59,12 +62,11 @@
             color: #604507;
         }
 
+        /* کل محتوای صفحه را دقیقاً وسط‌چین می‌کند */
         .page {
-             width: min(900px, calc(100% - 36px));
-              margin: 34px auto 28px;
+            width: min(900px, calc(100% - 36px));
+            margin: 34px auto 28px;
         }
-
-           
 
         .heading {
             margin: 0 auto 25px;
@@ -383,16 +385,13 @@
             text-align: center;
         }
 
-        @media (min-width: 1500px) {
-            .page {
-                margin-right: max(55px, calc((100% - 1320px) / 2));
-            }
-        }
-
         @media (max-width: 760px) {
             body {
                 background:
-                    linear-gradient(rgba(251, 249, 244, 0.9), rgba(251, 249, 244, 0.95)),
+                    linear-gradient(
+                        rgba(251, 249, 244, 0.9),
+                        rgba(251, 249, 244, 0.95)
+                    ),
                     url("./ax/gold-price-bg.webp") center / cover fixed no-repeat,
                     #f4eee2;
             }
@@ -519,9 +518,11 @@
     <main class="page">
         <header class="heading">
             <h1>قیمت روز</h1>
+
             <div class="ornament" aria-hidden="true">
                 <span class="diamond">♢</span>
             </div>
+
             <p class="date-line">
                 تاریخ:
                 <strong id="update-time">در حال دریافت...</strong>
@@ -539,10 +540,12 @@
                     <span class="price-name">دلار آمریکا</span>
                     <strong class="price-value">—</strong>
                 </div>
+
                 <div class="price-row">
                     <span class="price-name">یورو</span>
                     <strong class="price-value">—</strong>
                 </div>
+
                 <div class="price-row">
                     <span class="price-name">سکه</span>
                     <strong class="price-value">—</strong>
@@ -561,14 +564,17 @@
                     <span class="price-name">انس طلا</span>
                     <strong class="price-value">—</strong>
                 </div>
+
                 <div class="price-row">
                     <span class="price-name">طلای ۱۸ عیار</span>
                     <strong class="price-value" id="price-value">در حال دریافت...</strong>
                 </div>
+
                 <div class="price-row">
                     <span class="price-name">طلای ۲۴ عیار</span>
                     <strong class="price-value">—</strong>
                 </div>
+
                 <div class="price-row">
                     <span class="price-name">طلای دست دوم</span>
                     <strong class="price-value">—</strong>
@@ -586,26 +592,32 @@
                     <span class="change-name">سکه</span>
                     <span class="change-data"><span>—</span><span class="change-arrow">↑</span></span>
                 </div>
+
                 <div class="change-item">
                     <span class="change-name">یورو</span>
                     <span class="change-data"><span>—</span><span class="change-arrow down">↓</span></span>
                 </div>
+
                 <div class="change-item">
                     <span class="change-name">دلار</span>
                     <span class="change-data"><span>—</span><span class="change-arrow">↑</span></span>
                 </div>
+
                 <div class="change-item">
                     <span class="change-name">طلای دست دوم</span>
                     <span class="change-data"><span>—</span><span class="change-arrow down">↓</span></span>
                 </div>
+
                 <div class="change-item">
                     <span class="change-name">طلای ۲۴ عیار</span>
                     <span class="change-data"><span>—</span><span class="change-arrow">↑</span></span>
                 </div>
+
                 <div class="change-item">
                     <span class="change-name">طلای ۱۸ عیار</span>
                     <span class="change-data"><span>—</span><span class="change-arrow">↑</span></span>
                 </div>
+
                 <div class="change-item">
                     <span class="change-name">انس طلا</span>
                     <span class="change-data"><span>—</span><span class="change-arrow">↑</span></span>
@@ -628,7 +640,13 @@
 
             <div class="buttons">
                 <a class="btn btn-primary" href="./index.html">بازگشت به گالری</a>
-                <a class="btn" href="https://ble.ir/peransgold" target="_blank" rel="noopener noreferrer">
+
+                <a
+                    class="btn"
+                    href="https://ble.ir/peransgold"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     کانال بله
                 </a>
             </div>
@@ -685,12 +703,13 @@
                 priceValueEl.textContent = formatPrice(data.price);
                 updateTimeEl.textContent = toPersianDigits(data.updated_at || '—');
                 errorMessageEl.style.display = 'none';
+
                 statusEl.textContent =
                     'قیمت هر ۳۰ دقیقه به‌صورت خودکار به‌روزرسانی می‌شود. واحد قیمت: ' +
                     (data.unit || 'تومان');
-
             } catch (error) {
                 console.error('خطای دریافت قیمت:', error);
+
                 priceValueEl.textContent = '—';
                 updateTimeEl.textContent = '—';
                 errorMessageEl.style.display = 'block';
