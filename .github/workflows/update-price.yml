@@ -40,7 +40,7 @@ jobs:
           fetch_page "https://www.tgju.org/profile/ons" "ons.html"
           fetch_page "https://www.tgju.org/profile/price_dollar_rl" "dollar.html"
           fetch_page "https://www.tgju.org/profile/price_eur" "eur.html"
-          fetch_page "https://www.tgju.org/profile/sekke" "sekke.html"
+          fetch_page "https://www.tgju.org/profile/retail_sekke" "sekke.html"
 
           python3 - <<'PY'
           import json
@@ -58,14 +58,15 @@ jobs:
 
               # 1. Extract Price
               price = None
-              patterns = [
+              price_patterns = [
                   r'<span[^>]*data-col=["\']price["\'][^>]*>([^<]+)</span>',
+                  r'<span[^>]*class=["\'][^"\']*value[^"\']*["\'][^>]*>([^<]+)</span>',
                   r'<td[^>]*class=["\'][^"\']*info-price[^"\']*["\'][^>]*>([^<]+)</td>',
                   r'data-price=["\']([0-9.]+)["\']',
                   r'class=["\'][^"\']*price[^"\']*["\'][^>]*>([0-9,.]+)<'
               ]
 
-              for pat in patterns:
+              for pat in price_patterns:
                   m = re.search(pat, html)
                   if m:
                       raw_str = m.group(1).replace(',', '').replace('٫', '.').strip()
@@ -80,21 +81,25 @@ jobs:
               # 2. Extract Change Rate (%)
               change = 0.0
               change_patterns = [
-                  r'<span[^>]*data-col=["\']change_percent["\'][^>]*>([^<]+)</span>',
+                  r'<span[^>]*data-col=["\']change_percent["\'][^>]*>(.*?)</span>',
+                  r'<span[^>]*data-col=["\']change["\'][^>]*>(.*?)</span>',
                   r'<td[^>]*class=["\'][^"\']*info-change[^"\']*["\'][^>]*>(.*?)</td>',
-                  r'class=["\'][^"\']*(?:change-percent|rate-change)[^"\']*["\'][^>]*>([^<]+)<'
+                  r'class=["\'][^"\']*(?:change-percent|rate-change|info-change)[^"\']*["\'][^>]*>(.*?)<'
               ]
               for c_pat in change_patterns:
                   cm = re.search(c_pat, html, re.DOTALL)
                   if cm:
-                      content = cm.group(1)
-                      # Check if drop / negative
-                      is_neg = "-" in content or "low" in content or "danger" in content or "down" in content
-                      nums = re.findall(r'\d+(?:\.\d+)?', content)
+                      content = cm.group(1).strip()
+                      # Check negative
+                      is_neg = ("-" in content or "low" in content or "danger" in content or "down" in content or "drop" in content)
+                      nums = re.findall(r'(\d+(?:[.,]\d+)?)', content.replace('٫', '.'))
                       if nums:
-                          val_c = float(nums[0])
-                          change = -val_c if is_neg else val_c
-                          break
+                          try:
+                              val_c = float(nums[0].replace(',', '.'))
+                              change = -val_c if is_neg else val_c
+                              break
+                          except Exception:
+                              pass
 
               return price, round(change, 2)
 
@@ -144,13 +149,13 @@ jobs:
           }
 
           changes = {
-              "gold18": c_gold18 or old_c.get("gold18", 0.0),
-              "gold24": c_gold18 or old_c.get("gold24", 0.0),
-              "used18": c_gold18 or old_c.get("used18", 0.0),
-              "ons": c_ons or old_c.get("ons", 0.0),
-              "usd": c_usd or old_c.get("usd", 0.0),
-              "eur": c_eur or old_c.get("eur", 0.0),
-              "sekke": c_sekke or old_c.get("sekke", 0.0)
+              "gold18": c_gold18 if c_gold18 != 0.0 else old_c.get("gold18", 0.0),
+              "gold24": c_gold18 if c_gold18 != 0.0 else old_c.get("gold24", 0.0),
+              "used18": c_gold18 if c_gold18 != 0.0 else old_c.get("used18", 0.0),
+              "ons": c_ons if c_ons != 0.0 else old_c.get("ons", 0.0),
+              "usd": c_usd if c_usd != 0.0 else old_c.get("usd", 0.0),
+              "eur": c_eur if c_eur != 0.0 else old_c.get("eur", 0.0),
+              "sekke": c_sekke if c_sekke != 0.0 else old_c.get("sekke", 0.0)
           }
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
@@ -177,4 +182,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add price.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update all markets directly [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update all markets with sekke and changes [skip ci]" && git push)
