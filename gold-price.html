@@ -360,6 +360,7 @@
             display: block;
             font-size: 27px;
             line-height: 1.1;
+            color: var(--gold);
         }
 
         .brand-name {
@@ -440,7 +441,7 @@
             text-align: center;
         }
 
-        /* تنظیم اختصاصی برای نمایشگرهای دسکتاپ با ارتفاع متداول */
+        /* تنظیم اختصاصی برای دسکتاپ‌های با ارتفاع فشرده */
         @media (min-width: 761px) and (max-height: 760px) {
             .page {
                 margin-top: 8px;
@@ -486,7 +487,6 @@
             }
         }
 
-        /* ریسپانسیو موبایل و تبلت */
         @media (max-width: 760px) {
             body {
                 background:
@@ -674,6 +674,7 @@
         </div>
 
         <footer>
+            <!-- برندینگ مشابه فوتر صفحه اصلی در پایین صفحه -->
             <div class="footer-brand" aria-label="پرنس گلد">
                 <div class="brand-mark">
                     <span class="brand-diamond" aria-hidden="true">♢</span>
@@ -683,40 +684,6 @@
             </div>
 
             <div class="buttons">
-                <a class="btn btn-primary" href="./index.html">بازگشت به گالری</a>
-
-                <a
-                    class="btn"
-                    href="https://ble.ir/peransgold"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    کانال بله
-                </a>
-            </div>
-
-            <p class="status" id="status-message" aria-live="polite">
-                اطلاعات قیمت در حال دریافت است...
-            </p>
-        </footer>
-    </main>
-
-    <script>
-        function toPersianDigits(value) {
-            return String(value).replace(/\d/g, digit =>
-                '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]
-            );
-        }
-
-        function formatPrice(value) {
-            const cleanValue = String(value ?? '').replace(/[^\d]/g, '');
-            const numberValue = Number.parseInt(cleanValue, 10);
-
-            if (!Number.isFinite(numberValue) || numberValue <= 0) {
-                return '—';
-            }
-
-            return toPersianDigits(number="buttons">
                 <a class="btn btn-primary" href="./index.html">بازگشت به گالری</a>
 
                 <a
@@ -779,3 +746,27 @@
                 }
 
                 priceValueEl.textContent = formatPrice(data.price);
+
+                if (data.updated_at) {
+                    updateTimeEl.textContent = toPersianDigits(data.updated_at);
+                } else {
+                    updateTimeEl.textContent = 'امروز';
+                }
+
+                statusEl.textContent = 'قیمت‌ها به‌روز است.';
+                errorMessageEl.style.display = 'none';
+
+            } catch (err) {
+                console.error(err);
+                priceValueEl.textContent = '—';
+                updateTimeEl.textContent = 'خطا در دریافت';
+                errorMessageEl.style.display = 'block';
+                statusEl.textContent = 'خطا در به‌روزرسانی اطلاعات.';
+            }
+        }
+
+        fetchGoldPrice();
+        setInterval(fetchGoldPrice, 60000);
+    </script>
+</body>
+</html>
