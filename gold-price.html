@@ -7,187 +7,364 @@
   <title>قیمت لحظه‌ای طلا | پرنس گلد گالری</title>
 
   <style>
-    :root{
-      --gold:#ad811a;
-      --gold-dark:#6e4e08;
-      --gold-light:#d6b75c;
-      --ink:#2b2317;
-      --muted:#6e6557;
-      --line:#e8ddc7;
-      --green:#568a55;
-      --red:#bd4840;
+    :root {
+      --gold: #ad811a;
+      --gold-dark: #6e4e08;
+      --gold-light: #d6b75c;
+      --ink: #2b2317;
+      --muted: #6e6557;
+      --line: #e8ddc7;
+      --green: #568a55;
+      --red: #bd4840;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; min-height:100vh; color:var(--ink);
-      font-family:Tahoma,Arial,sans-serif;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
       background:
         linear-gradient(
           to right,
-          rgba(251,249,244,0) 0%,
-          rgba(251,249,244,0.1) 25%,
-          rgba(251,249,244,0.65) 50%,
-          rgba(251,249,244,0.92) 75%,
-          rgba(251,249,244,0.98) 100%
+          rgba(251, 249, 244, 0) 0%,
+          rgba(251, 249, 244, 0.1) 25%,
+          rgba(251, 249, 244, 0.65) 50%,
+          rgba(251, 249, 244, 0.92) 75%,
+          rgba(251, 249, 244, 0.98) 100%
         ),
-        url("ax/gold-price-bg.webp") left center/cover fixed no-repeat,
+        url("ax/gold-price-bg.webp") left center / cover fixed no-repeat,
         #f4eee2;
     }
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      min-height:54px; padding:8px clamp(16px,4vw,48px);
-      border-bottom:1px solid rgba(191,165,108,.3);
-      background:rgba(255,254,250,.88);
-      backdrop-filter:blur(10px);
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 54px;
+      padding: 8px clamp(16px, 4vw, 48px);
+      border-bottom: 1px solid rgba(191, 165, 108, 0.3);
+      background: rgba(255, 254, 250, 0.88);
+      backdrop-filter: blur(10px);
     }
-    .topbar-brand{display:inline-flex; align-items:center; gap:10px; text-decoration:none}
-    .topbar-logo{width:36px; height:36px; object-fit:contain; border-radius:6px}
-    .topbar-title-wrap{display:flex; flex-direction:column; line-height:1.25}
-    .topbar-brand-name{color:var(--gold-dark); font-size:15px; font-weight:bold; letter-spacing:-.2px}
-    .topbar-brand-sub{color:#8f7847; font-family:Georgia,serif; font-size:10.5px; letter-spacing:1.5px; font-weight:600}
-    .topbar-back{
-      color:var(--gold-dark); font-size:13px; font-weight:bold; text-decoration:none;
-      padding:7px 15px; border-radius:8px;
-      background:rgba(255,255,255,.7);
-      border:1px solid rgba(191,165,108,.35);
-      transition:all .2s ease;
+    .topbar-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
     }
-    .topbar-back:hover{color:#4a3403; background:rgba(255,255,255,.98)}
-
-    /* انتقال کل محتوا به راست برای آزاد ماندن تصویر سمت چپ */
-    .page{
-      width:min(840px, calc(100% - 32px));
-      margin-top:16px; margin-bottom:20px;
-      margin-right:clamp(16px,6vw,80px);
-      margin-left:auto;
+    .topbar-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 6px;
     }
-    .heading{margin:0 auto 14px; text-align:center}
-    h1{margin:0; color:#44351b; font-size:40px; letter-spacing:-1.5px}
-    .ornament{
-      display:flex; align-items:center; justify-content:center; gap:14px;
-      width:min(560px, 90%); margin:8px auto; color:var(--gold-light);
+    .topbar-title-wrap {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
     }
-    .ornament::before,.ornament::after{
-      height:1px; flex:1; content:"";
-      background:linear-gradient(90deg,transparent,var(--gold-light));
+    .topbar-brand-name {
+      color: var(--gold-dark);
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: -0.2px;
     }
-    .ornament::after{background:linear-gradient(90deg,var(--gold-light),transparent)}
-    .diamond{font-size:21px; line-height:1}
-    .date-line{margin:0; color:var(--muted); font-size:13.5px}
-    .date-line strong{color:var(--ink); font-weight:bold}
-
-    .market-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
-    .market-card{
-      position:relative; padding:62px 18px 14px; overflow:hidden;
-      border:1px solid #c9ad69; border-radius:19px;
-      background:rgba(255,254,250,.92);
-      box-shadow:0 12px 30px rgba(93,69,22,.08);
-      backdrop-filter:blur(8px);
+    .topbar-brand-sub {
+      color: #8f7847;
+      font-family: Georgia, serif;
+      font-size: 10.5px;
+      letter-spacing: 1.5px;
+      font-weight: 600;
     }
-    .market-title{
-      position:absolute; top:0; left:50%;
-      display:flex; align-items:center; justify-content:center; gap:10px;
-      width:min(210px,76%); min-height:46px; padding:8px 14px;
-      transform:translateX(-50%);
-      border:1px solid rgba(255,255,255,.35);
-      border-radius:0 0 13px 13px;
-      color:#fff;
-      background:linear-gradient(135deg,#98700f,#c09a36);
-      font-size:16.5px; font-weight:500; text-align:center;
+    .topbar-back {
+      color: var(--gold-dark);
+      font-size: 13px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 7px 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(191, 165, 108, 0.35);
+      transition: all 0.2s ease;
     }
-    .market-title .icon{font-size:18px}
-    .price-row{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      min-height:52px; border-bottom:1px solid var(--line);
-    }
-    .price-row:last-of-type{border-bottom:0}
-    .price-name{font-size:15px}
-    .price-value{
-      min-width:120px; padding:8px 12px; border-radius:9px;
-      color:#5c471c; background:#f4eee2;
-      font-size:14.5px; font-weight:bold; text-align:center; white-space:nowrap;
+    .topbar-back:hover {
+      color: #4a3403;
+      background: rgba(255, 255, 255, 0.98);
     }
 
-    .market-change{
-      margin-top:14px; padding:0 16px 14px;
-      border:1px solid #c9ad69; border-radius:18px;
-      background:rgba(255,254,250,.94);
-      box-shadow:0 10px 24px rgba(93,69,22,.06);
-      backdrop-filter:blur(8px);
+    /* هدایت کارت‌ها به سمت راست برای دیده شدن تصویر مدل سمت چپ */
+    .page {
+      width: min(840px, calc(100% - 32px));
+      margin-top: 16px;
+      margin-bottom: 20px;
+      margin-right: clamp(16px, 6vw, 80px);
+      margin-left: auto;
     }
-    .change-heading{
-      width:min(340px,90%); margin:0 auto 12px; padding:8px 12px;
-      border-radius:0 0 11px 11px;
-      color:#fff; background:linear-gradient(135deg,#98700f,#c09a36);
-      font-size:14px; text-align:center;
+    .heading {
+      margin: 0 auto 14px;
+      text-align: center;
     }
-    .change-grid{display:grid; grid-template-columns:repeat(7,minmax(0,1fr))}
-    .change-item{padding:4px 8px 0; border-left:1px solid var(--line); text-align:center}
-    .change-item:last-child{border-left:0}
-    .change-name{display:block; min-height:28px; color:#4a3e2e; font-size:12px; line-height:1.7}
-    .change-data{display:flex; align-items:center; justify-content:center; gap:6px; margin-top:4px; color:var(--muted); font-size:14px}
-    .change-arrow{color:var(--green); font-size:21px; line-height:1}
-    .change-arrow.down{color:var(--red)}
-
-    .footer-brand{
-      display:flex; align-items:center; gap:16px;
-      width:min(520px,90%); margin:18px auto 0; color:var(--gold-light);
+    h1 {
+      margin: 0;
+      color: #44351b;
+      font-size: 38px;
+      letter-spacing: -1.5px;
     }
-    .footer-brand::before,.footer-brand::after{
-      height:1px; flex:1; content:"";
-      background:linear-gradient(90deg,transparent,var(--gold-light));
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: min(560px, 90%);
+      margin: 8px auto;
+      color: var(--gold-light);
     }
-    .footer-brand::after{background:linear-gradient(90deg,var(--gold-light),transparent)}
-    .brand-box{display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center}
-    .brand-logo-img{max-width:58px; max-height:58px; object-fit:contain}
-    .brand-text{color:#634503; font-size:17px; font-weight:800; letter-spacing:-.3px}
-
-    .buttons{display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin:14px 0 0}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      min-height:42px; padding:8px 22px;
-      border:1px solid #d4be8a; border-radius:12px;
-      color:#634503; background:rgba(255,254,250,.95);
-      font-size:14px; font-weight:bold; text-decoration:none;
-      box-shadow:0 4px 10px rgba(0,0,0,.04);
-      transition:transform .2s, background .2s, box-shadow .2s;
+    .ornament::before, .ornament::after {
+      height: 1px;
+      flex: 1;
+      content: "";
+      background: linear-gradient(90deg, transparent, var(--gold-light));
     }
-    .btn:hover{transform:translateY(-2px); background:#fffbf2; box-shadow:0 6px 14px rgba(173,129,26,.18)}
-    .btn-primary{
-      border-color:#a8790b; color:#fff;
-      background:linear-gradient(135deg,#a67b13,#c29c32);
-      box-shadow:0 6px 16px rgba(160,119,20,.22);
+    .ornament::after {
+      background: linear-gradient(90deg, var(--gold-light), transparent);
     }
-    .btn-primary:hover{background:linear-gradient(135deg,#8d680e,#b28a20)}
-    .status{margin:8px 0 0; color:#574d3f; font-size:12.5px; font-weight:500; text-align:center}
-    .error-message{
-      display:none; margin-top:12px; padding:10px 14px;
-      border:1px solid #edc9c5; border-radius:10px;
-      color:#9e342c; background:#fff3f1;
-      font-size:13px; line-height:1.8; text-align:center;
+    .diamond {
+      font-size: 21px;
+      line-height: 1;
+    }
+    .date-line {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+    .date-line strong {
+      color: var(--ink);
+      font-weight: bold;
     }
 
-    @media (max-width:900px){
-      .page{width:min(650px,calc(100% - 24px)); margin-right:auto; margin-left:auto}
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
-    @media (max-width:760px){
-      body{
+    .market-card {
+      position: relative;
+      padding: 60px 18px 14px;
+      overflow: hidden;
+      border: 1px solid #c9ad69;
+      border-radius: 19px;
+      background: rgba(255, 254, 250, 0.92);
+      box-shadow: 0 12px 30px rgba(93, 69, 22, 0.08);
+      backdrop-filter: blur(8px);
+    }
+    .market-title {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: min(210px, 76%);
+      min-height: 44px;
+      padding: 8px 14px;
+      transform: translateX(-50%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 0 0 13px 13px;
+      color: #fff;
+      background: linear-gradient(135deg, #98700f, #c09a36);
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .market-title .icon { font-size: 18px; }
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 50px;
+      border-bottom: 1px solid var(--line);
+    }
+    .price-row:last-of-type { border-bottom: 0; }
+    .price-name { font-size: 14.5px; font-weight: 500; }
+    .price-value {
+      min-width: 120px;
+      padding: 7px 12px;
+      border-radius: 9px;
+      color: #5c471c;
+      background: #f4eee2;
+      font-size: 14.5px;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .market-change {
+      margin-top: 14px;
+      padding: 0 16px 14px;
+      border: 1px solid #c9ad69;
+      border-radius: 18px;
+      background: rgba(255, 254, 250, 0.94);
+      box-shadow: 0 10px 24px rgba(93, 69, 22, 0.06);
+      backdrop-filter: blur(8px);
+    }
+    .change-heading {
+      width: min(320px, 90%);
+      margin: 0 auto 12px;
+      padding: 7px 12px;
+      border-radius: 0 0 11px 11px;
+      color: #fff;
+      background: linear-gradient(135deg, #98700f, #c09a36);
+      font-size: 13.5px;
+      text-align: center;
+    }
+    .change-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .change-item {
+      padding: 4px 6px 0;
+      border-left: 1px solid var(--line);
+      text-align: center;
+    }
+    .change-item:last-child { border-left: 0; }
+    .change-name {
+      display: block;
+      min-height: 26px;
+      color: #4a3e2e;
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+    .change-data {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+    .change-arrow {
+      color: var(--green);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .change-arrow.down { color: var(--red); }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: min(520px, 90%);
+      margin: 18px auto 0;
+      color: var(--gold-light);
+    }
+    .footer-brand::before, .footer-brand::after {
+      height: 1px;
+      flex: 1;
+      content: "";
+      background: linear-gradient(90deg, transparent, var(--gold-light));
+    }
+    .footer-brand::after {
+      background: linear-gradient(90deg, var(--gold-light), transparent);
+    }
+    .brand-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      text-align: center;
+    }
+    .brand-logo-img {
+      max-width: 54px;
+      max-height: 54px;
+      object-fit: contain;
+    }
+    .brand-text {
+      color: #634503;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 14px 0 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 20px;
+      border: 1px solid #d4be8a;
+      border-radius: 12px;
+      color: #634503;
+      background: rgba(255, 254, 250, 0.95);
+      font-size: 13.5px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      background: #fffbf2;
+    }
+    .btn-primary {
+      border-color: #a8790b;
+      color: #fff;
+      background: linear-gradient(135deg, #a67b13, #c29c32);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #8d680e, #b28a20);
+    }
+    .status {
+      margin: 8px 0 0;
+      color: #574d3f;
+      font-size: 12px;
+      text-align: center;
+    }
+    .error-message {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 14px;
+      border: 1px solid #edc9c5;
+      border-radius: 10px;
+      color: #9e342c;
+      background: #fff3f1;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        width: min(650px, calc(100% - 24px));
+        margin-right: auto;
+        margin-left: auto;
+      }
+    }
+    @media (max-width: 760px) {
+      body {
         background:
-          linear-gradient(to bottom, rgba(251,249,244,.25) 0%, rgba(251,249,244,.88) 100%),
-          url("ax/gold-price-bg.webp") center center/cover no-repeat,
+          linear-gradient(to bottom, rgba(251, 249, 244, 0.25) 0%, rgba(251, 249, 244, 0.88) 100%),
+          url("ax/gold-price-bg.webp") center center / cover no-repeat,
           #f4eee2;
       }
-      .page{width:min(580px,calc(100% - 20px)); margin:14px auto}
-      h1{font-size:clamp(30px,7vw,38px)}
-      .change-grid{grid-template-columns:repeat(4,minmax(0,1fr)); row-gap:12px}
-      .change-item:nth-child(4){border-left:0}
+      .page { width: min(580px, calc(100% - 20px)); margin: 14px auto; }
+      h1 { font-size: clamp(28px, 6vw, 36px); }
+      .change-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 12px; }
+      .change-item:nth-child(4) { border-left: 0; }
     }
-    @media (max-width:480px){
-      .topbar{min-height:48px; padding:8px 12px}
-      .market-grid{grid-template-columns:1fr; gap:12px}
-      .change-grid{grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:12px}
-      .change-item:nth-child(odd){border-left:1px solid var(--line)}
-      .change-item:nth-child(even){border-left:0}
+    @media (max-width: 480px) {
+      .topbar { min-height: 48px; padding: 8px 12px; }
+      .market-grid { grid-template-columns: 1fr; gap: 12px; }
+      .change-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 12px; }
+      .change-item:nth-child(odd) { border-left: 1px solid var(--line); }
+      .change-item:nth-child(even) { border-left: 0; }
     }
   </style>
 </head>
@@ -298,59 +475,48 @@
     </section>
 
     <div id="error-message" class="error-message" role="alert">
-      دریافت قیمت با خطا مواجه شد. لطفاً چند لحظهٔ دیگر صفحه را دوباره بارگذاری کنید.
+      دریافت قیمت با خطا مواجه شد. لطفاً چند لحظهٔ دیگر صفحه را رفرش کنید.
+    </div>
+
+    <footer>
+      <div class="footer-brand" aria-label="پرنس گلد گالری">
+        <div class="brand-box">
+          <img src="ax/logo.png" alt="پرنس گلد گالری" class="brand-logo-img" class="change-item">
+          <span class="change-name">دلار</span>
+          <span class="change-data"><span id="c-usd">—</span><span id="a-usd" class="change-arrow">↑</span></span>
+        </div>
+
+        <div class="change-item">
+          <span class="change-name">طلای دست دوم</span>
+          <span class="change-data"><span id="c-used18">—</span><span id="a-used18" class="change-arrow">↑</span></span>
+        </div>
+
+        <div class="change-item">
+          <span class="change-name">طلای ۲۴ عیار</span>
+          <span class="change-data"><span id="c-gold24">—</span><span id="a-gold24" class="change-arrow">↑</span></span>
+        </div>
+
+        <div class="change-item">
+          <span class="change-name">طلای ۱۸ عیار</span>
+          <span class="change-data"><span id="c-gold18">—</span><span id="a-gold18" class="change-arrow">↑</span></span>
+        </div>
+
+        <div class="change-item">
+          <span class="change-name">انس طلا</span>
+          <span class="change-data"><span id="c-ons">—</span><span id="a-ons" class="change-arrow">↑</span></span>
+        </div>
+      </div>
+    </section>
+
+    <div id="error-message" class="error-message" role="alert">
+      دریافت قیمت با خطا مواجه شد. لطفاً چند لحظهٔ دیگر صفحه را رفرش کنید.
     </div>
 
     <footer>
       <div class="footer-brand" aria-label="پرنس گلد گالری">
         <div class="brand-box">
           <img src="ax/logo.png" alt="پرنس گلد گالری" class="brand-logo-img" onerror="this.style.display='none'">
-          <span class="brand-text">پرنس گلد گالری</span>
-        </div>
-      </div>
-
-      <div class="buttons">
-        <a class="btn btn-primary" href="index.html">بازگشت به گالری</a>
-        <a class="btn" href="https://ble.ir/peransgold" target="_blank" rel="noopener noreferrer">کانال بله</a>
-      </div>
-
-      <p class="status" id="status-message" aria-live="polite">اطلاعات قیمت در حال دریافت است...</p>
-    </footer>
-  </main>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-
-    function toPersianDigits(str) {
-      return String(str).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
-    }
-
-    // عدد را از هر فرمتی درمی‌آورد: number / "23,939,000" / "۲۳,۹۳۹,۰۰۰"
-    function toNumberSmart(v) {
-      if (v === null || v === undefined) return null;
-      if (typeof v === "number") return Number.isFinite(v) ? v : null;
-
-      let s = String(v).trim();
-      if (!s) return null;
-
-      // تبدیل ارقام فارسی/عربی به انگلیسی
-      const fa = "۰۱۲۳۴۵۶۷۸۹";
-      const ar = "٠١٢٣٤٥٦٧٨٩";
-      s = s.replace(/[۰-۹]/g, ch => String(fa.indexOf(ch)));
-      s = s.replace(/[٠-٩]/g, ch => String(ar.indexOf(ch)));
-
-      // حذف جداکننده‌ها و متن اضافی
-      s = s.replace(/[,\u066C\u066B\s]/g, "");
-      s = s.replace(/[^0-9.\-]/g, "");
-
-      const n = Number(s);
-      return Number.isFinite(n) ? n : null;
-    }
-
-    function formatMoney(n) {
-      if (n === null) return "—";
-      const rounded = Math.round(n);
-      return toPersianDigits(rounded.toLocaleString("en-US"));
+          <span class="brand-text">پرنس گلد-US"));
     }
 
     function formatFloat(n, digits = 1) {
@@ -365,12 +531,12 @@
 
     function setChange(key, value) {
       const v = toNumberSmart(value);
-      const txt = (v === null) ? "—" : (toPersianDigits(Math.abs(v).toFixed(2)) + "%");
+      const txt = v === null ? "—" : toPersianDigits(Math.abs(v).toFixed(2)) + "%";
       setText("c-" + key, txt);
 
       const arrow = $("a-" + key);
       if (arrow) {
-        const down = (v !== null && v < 0);
+        const down = v !== null && v < 0;
         arrow.textContent = down ? "↓" : "↑";
         arrow.classList.toggle("down", down);
       }
@@ -383,17 +549,17 @@
       try {
         const res = await fetch("price.json?nocache=" + Date.now(), {
           cache: "no-store",
-          headers: { "Cache-Control": "no-cache" }
+          headers: { "Cache-Control": "no-cache" },
         });
         if (!res.ok) throw new Error("HTTP " + res.status);
 
         const data = await res.json();
 
-        // پشتیبانی از دو مدل:
-        // 1) مدل کامل: data.markets
-        // 2) مدل ساده قدیمی: {price: ...} فقط برای طلای ۱۸
+        // هم ساختار جدید (markets) و هم ساختار کنونی شما ({price: "23995800"}) را پشتیبانی می‌کند
         const m = data.markets ? data.markets : {};
-        if (data.price !== undefined && m.gold18 === undefined) m.gold18 = data.price;
+        if (data.price !== undefined && m.gold18 === undefined) {
+          m.gold18 = data.price;
+        }
 
         setText("update-time", data.updated_at ? toPersianDigits(data.updated_at) : "امروز");
 
