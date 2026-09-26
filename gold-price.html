@@ -33,11 +33,21 @@
             color: var(--ink);
             font-family: Tahoma, Arial, sans-serif;
             background:
+                /* لایه مه‌آلودگی و محو شدن نرم تصویر از چپ به راست */
                 linear-gradient(
-                    rgba(251, 249, 244, 0.72),
-                    rgba(251, 249, 244, 0.82)
+                    to right,
+                    rgba(251, 249, 244, 0.18) 0%,
+                    rgba(251, 249, 244, 0.35) 26%,
+                    rgba(251, 249, 244, 0.68) 45%,
+                    rgba(251, 249, 244, 0.88) 70%,
+                    rgba(251, 249, 244, 0.94) 100%
                 ),
-                url("ax/gold-price-bg.webp") center center / cover fixed no-repeat,
+                linear-gradient(
+                    to bottom,
+                    rgba(251, 249, 244, 0.25) 0%,
+                    rgba(251, 249, 244, 0.65) 100%
+                ),
+                url("./ax/gold-price-bg.webp") center left / cover fixed no-repeat,
                 #f4eee2;
         }
 
@@ -45,23 +55,67 @@
             color: inherit;
         }
 
+        /* نوار بالای صفحه با لوگو و برند سمت راست */
         .topbar {
-            min-height: 48px;
-            padding: 12px clamp(18px, 6vw, 90px);
-            border-bottom: 1px solid rgba(191, 165, 108, 0.23);
-            background: rgba(255, 254, 250, 0.78);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 52px;
+            padding: 8px clamp(16px, 4vw, 48px);
+            border-bottom: 1px solid rgba(191, 165, 108, 0.25);
+            background: rgba(255, 254, 250, 0.82);
             backdrop-filter: blur(12px);
         }
 
-        .topbar a {
-            color: var(--gold-dark);
-            font-size: 14px;
-            font-weight: bold;
+        .topbar-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
         }
 
-        .topbar a:hover {
+        .topbar-logo {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .topbar-title-wrap {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .topbar-brand-name {
+            color: #7a580c;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: -0.2px;
+        }
+
+        .topbar-brand-sub {
+            color: #a89467;
+            font-family: Georgia, serif;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        .topbar-back {
+            color: var(--gold-dark);
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(191, 165, 108, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .topbar-back:hover {
             color: #604507;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .page {
@@ -386,8 +440,8 @@
             text-align: center;
         }
 
-        /* نمایشگرهای کوتاه */
-        @media (min-width: 761px) and (max-height: 699px) {
+        /* تنظیم اختصاصی برای نمایشگرهای دسکتاپ با ارتفاع متداول */
+        @media (min-width: 761px) and (max-height: 760px) {
             .page {
                 margin-top: 8px;
                 margin-bottom: 6px;
@@ -432,40 +486,26 @@
             }
         }
 
-        /* تبلت و موبایل */
+        /* ریسپانسیو موبایل و تبلت */
         @media (max-width: 760px) {
             body {
                 background:
                     linear-gradient(
-                        rgba(251, 249, 244, 0.72),
-                        rgba(251, 249, 244, 0.84)
+                        to bottom,
+                        rgba(251, 249, 244, 0.65) 0%,
+                        rgba(251, 249, 244, 0.88) 100%
                     ),
-                    url("ax/gold-price-bg.webp") center center / cover no-repeat,
+                    url("./ax/gold-price-bg.webp") center center / cover no-repeat,
                     #f4eee2;
             }
 
             .page {
                 width: min(590px, calc(100% - 24px));
-                margin: 22px auto;
+                margin: 20px auto;
             }
 
             h1 {
-                font-size: clamp(34px, 8vw, 44px);
-            }
-
-            .market-card {
-                padding-right: 13px;
-                padding-left: 13px;
-            }
-
-            .price-name {
-                font-size: 14px;
-            }
-
-            .price-value {
-                min-width: 100px;
-                padding: 9px 7px;
-                font-size: 13px;
+                font-size: clamp(32px, 7vw, 42px);
             }
 
             .change-grid {
@@ -480,39 +520,13 @@
 
         @media (max-width: 480px) {
             .topbar {
-                min-height: 46px;
-                padding: 13px 18px;
-            }
-
-            .page {
-                margin-top: 18px;
-            }
-
-            .heading {
-                margin-bottom: 16px;
+                min-height: 48px;
+                padding: 10px 14px;
             }
 
             .market-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
-            }
-
-            .market-card {
-                padding: 63px 14px 12px;
-            }
-
-            .market-title {
-                min-height: 48px;
-                font-size: 17px;
-            }
-
-            .price-row {
-                min-height: 56px;
-            }
-
-            .market-change {
-                padding-right: 10px;
-                padding-left: 10px;
             }
 
             .change-grid {
@@ -527,41 +541,23 @@
             .change-item:nth-child(even) {
                 border-left: 0;
             }
-
-            .change-name {
-                min-height: 0;
-            }
-
-            .footer-brand {
-                margin-top: 18px;
-            }
-
-            .buttons {
-                gap: 8px;
-            }
-
-            .btn {
-                min-height: 40px;
-                padding: 9px 13px;
-                font-size: 12px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                transition-duration: 0.01ms !important;
-            }
         }
     </style>
 </head>
 
 <body>
-    <div class="topbar">
-        <a href="./index.html">← بازگشت به صفحه اصلی</a>
-    </div>
+    <!-- نوار هدر با لوگو و عنوان سمت راست، و بازگشت سمت چپ -->
+    <header class="topbar">
+        <a href="./index.html" class="topbar-brand">
+            <img src="./ax/logo.png" alt="پرنس گلد گالری" class="topbar-logo" onerror="this.style.display='none'">
+            <div class="topbar-title-wrap">
+                <span class="topbar-brand-name">پرنس گلد گالری</span>
+                <span class="topbar-brand-sub">PERANS GOLD</span>
+            </div>
+        </a>
+
+        <a href="./index.html" class="topbar-back">← بازگشت به صفحه اصلی</a>
+    </header>
 
     <main class="page">
         <header class="heading">
@@ -720,6 +716,40 @@
                 return '—';
             }
 
+            return toPersianDigits(number="buttons">
+                <a class="btn btn-primary" href="./index.html">بازگشت به گالری</a>
+
+                <a
+                    class="btn"
+                    href="https://ble.ir/peransgold"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    کانال بله
+                </a>
+            </div>
+
+            <p class="status" id="status-message" aria-live="polite">
+                اطلاعات قیمت در حال دریافت است...
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        function toPersianDigits(value) {
+            return String(value).replace(/\d/g, digit =>
+                '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]
+            );
+        }
+
+        function formatPrice(value) {
+            const cleanValue = String(value ?? '').replace(/[^\d]/g, '');
+            const numberValue = Number.parseInt(cleanValue, 10);
+
+            if (!Number.isFinite(numberValue) || numberValue <= 0) {
+                return '—';
+            }
+
             return toPersianDigits(numberValue.toLocaleString('en-US'));
         }
 
@@ -749,23 +779,3 @@
                 }
 
                 priceValueEl.textContent = formatPrice(data.price);
-                updateTimeEl.textContent = toPersianDigits(data.updated_at || '—');
-                errorMessageEl.style.display = 'none';
-
-                statusEl.textContent =
-                    'قیمت هر ۳۰ دقیقه به‌صورت خودکار به‌روزرسانی می‌شود. واحد قیمت: ' +
-                    (data.unit || 'تومان');
-            } catch (error) {
-                console.error('خطای دریافت قیمت:', error);
-
-                priceValueEl.textContent = '—';
-                updateTimeEl.textContent = '—';
-                errorMessageEl.style.display = 'block';
-                statusEl.textContent = 'قیمت طلا در حال حاضر در دسترس نیست.';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchGoldPrice);
-    </script>
-</body>
-</html>
