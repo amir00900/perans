@@ -20,17 +20,18 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Fetch price and update price.json
+      - name: Fetch all market prices and update price.json
         shell: bash
         run: |
           set -euo pipefail
 
+          # Fetch main TGJU overview page
           curl --fail --silent --show-error --location \
             --retry 3 \
-            --connect-timeout 20 \
+            --connect-timeout 25 \
             -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" \
-            "https://www.tgju.org/profile/geram18" \
-            --output geram18.html
+            "https://www.tgju.org/" \
+            --output tgju_main.html || true
 
           python3 - <<'PY'
           import json
@@ -38,79 +39,171 @@ jobs:
           from datetime import datetime, timedelta, timezone
           from pathlib import Path
 
-          html = Path("geram18.html").read_text(encoding="utf-8", errors="ignore")
-          price_toman = None
+          def load_existing():
+              try:
+                  return json.loads(Path("price.json").read_text(encoding="utf-8"))
+              except Exception:
+                  return {}
 
-          patterns = [
-              r'<span[^>]*data-col=["\']price["\'][^>]*>([^<]+)</span>',
-              r'<td[^>]*class=["\'][^"\']*info-price[^"\']*["\'][^>]*>([^<]+)</td>',
-              r'data-price=["\']([0-9]+)["\']',
-              r'class=["\'][^"\']*price[^"\']*["\'][^>]*>([0-9,]+)<'
-          ]
+          existing = load_existing()
+          old_markets = existing.get("markets", {})
+          old_changes = existing.get("changes", {})
 
-          for p in patterns:
-              m = re.search(p, html)
-              if m:
-                  clean = re.sub(r'[^\d]', '', m.group(1))
-                  if clean:
-                      val = int(clean)
-                      toman = val // 10 if val > 50000000 else val
-                      if 15000000 <= toman <= 50000000:
-                          price_toman = toman
+          html = ""
+          html_path = Path("tgju_main.html")
+          if html_path.exists():
+              html = html_path.read_text(encoding="utf-8", errors="ignore")
+
+          # Helper to clean numbers
+          def parse_num(txt):
+              if not txt:
+                  return None
+              clean = re.sub(r'[^\d.]', '', txt.replace('٫', '.').replace('/', '.'))
+              try:
+                  return float(clean)
+              except Exception:
+                  return None
+
+          # Item mapping: market_key -> row market identifier in TGJU tables
+          # TGJU uses tr attributes like data-market-row="geram18", "sekke", "price_dollar_rl", "price_eur", "ons"
+          targets = {
+              "gold18": ["geram18"],
+              "ons": ["ons"],
+              "usd": ["price_dollar_rl", "dollar"],
+              "eur": ["price_eur", "eur"],
+              "sekke": ["sekke", "retail_sekke"]
+          }
+
+          extracted_prices = {}
+          extracted_changes = {}
+
+          for key, aliases in targets.items():
+              for alias in aliases:
+                  # Search row by data-market-row or id/class
+                  row_pattern = rf'<tr[^>]*data-market-row=["\']{alias}["\'][^>]*>(.*?)</tr>'
+                  row_match = re.search(row_pattern, html, re.DOTALL | re.IGNORECASE)
+                  if not row_match:
+                      row_pattern = rf'<tr[^>]*id=["\'][^"\']*{alias}[^"\']*["\'][^>]*>(.*?)</tr>'
+                      row_match = re.search(row_pattern, html, re.DOTALL | re.IGNORECASE)
+
+                  if row_match:
+                      row_html = row_match.group(1)
+                      # Extract price
+                      p_match = re.search(r'<td[^>]*class=["\'][^"\']*info-price[^"\']*["\'][^>]*>(.*?)</td>', row_html, re.DOTALL)
+                      if not p_match:
+                          p_match = re.search(r'class=["\'][^"\']*price[^"\']*["\'][^>]*>([^<]+)<', row_html)
+
+                      # Extract change percent
+                      c_match = re.search(r'<td[^>]*class=["\'][^"\']*info-change[^"\']*["\'][^>]*>(.*?)</td>', row_html, re.DOTALL)
+                      if not c_match:
+                          c_match = re.search(r'class=["\'][^"\']*change[^"\']*["\'][^>]*>([^<]+)<', row_html)
+
+                      if p_match:
+                          raw_val = parse_num(p_match.group(1))
+                          if raw_val:
+                              extracted_prices[key] = raw_val
+
+                      if c_match:
+                          # Check for negative sign or class
+                          is_negative = ("high" not in c_match.group(1) and ("low" in c_match.group(1) or "-" in c_match.group(1)))
+                          raw_change = parse_num(c_match.group(1))
+                          if raw_change is not None:
+                              extracted_changes[key] = -abs(raw_change) if is_negative else abs(raw_change)
+
+                      if key in extracted_prices:
                           break
 
-          if price_toman is None:
-              try:
-                  old_data = json.loads(Path("price.json").read_text(encoding="utf-8"))
-                  old_price = int(old_data.get("markets", {}).get("gold18") or old_data.get("price", 0))
-                  if 15000000 <= old_price <= 50000000:
-                      price_toman = old_price
-              except Exception:
-                  pass
+          # Process Gold 18 (convert to Toman if in Rial)
+          gold18 = extracted_prices.get("gold18")
+          if gold18:
+              if gold18 > 50000000:
+                  gold18 = int(gold18 // 10)
+              else:
+                  gold18 = int(gold18)
+              if not (15000000 <= gold18 <= 50000000):
+                  gold18 = None
 
-          if price_toman is None:
-              price_toman = 23995000
+          if not gold18:
+              gold18 = old_markets.get("gold18") or 23871100
 
-          price_24 = int(price_toman * (24 / 18))
-          price_used = int(price_toman * 0.985)
+          gold24 = int(gold18 * (24 / 18))
+          used18 = int(gold18 * 0.985)
+
+          # USD & EUR (convert Rial to Toman if needed)
+          def normalize_currency(val, min_toman, max_toman):
+              if not val:
+                  return None
+              val = int(val)
+              if val > max_toman:
+                  val = val // 10
+              return val if (min_toman <= val <= max_toman) else None
+
+          usd = normalize_currency(extracted_prices.get("usd"), 30000, 200000) or old_markets.get("usd")
+          eur = normalize_currency(extracted_prices.get("eur"), 30000, 250000) or old_markets.get("eur")
+
+          # Sekke
+          sekke = extracted_prices.get("sekke")
+          if sekke:
+              sekke = int(sekke // 10 if sekke > 150000000 else sekke)
+              if not (20000000 <= sekke <= 150000000):
+                  sekke = None
+          if not sekke:
+              sekke = old_markets.get("sekke")
+
+          # Ounce (USD)
+          ons = extracted_prices.get("ons")
+          if ons:
+              ons = float(ons)
+              if not (1000 <= ons <= 5000):
+                  ons = None
+          if not ons:
+              ons = old_markets.get("ons")
+
+          # Changes
+          gold18_change = extracted_changes.get("gold18", old_changes.get("gold18", 0.0))
+
+          markets = {
+              "gold18": gold18,
+              "gold24": gold24,
+              "used18": used18,
+              "ons": ons,
+              "usd": usd,
+              "eur": eur,
+              "sekke": sekke
+          }
+
+          changes = {
+              "gold18": gold18_change,
+              "gold24": gold18_change,
+              "used18": gold18_change,
+              "ons": extracted_changes.get("ons", old_changes.get("ons", 0.0)),
+              "usd": extracted_changes.get("usd", old_changes.get("usd", 0.0)),
+              "eur": extracted_changes.get("eur", old_changes.get("eur", 0.0)),
+              "sekke": extracted_changes.get("sekke", old_changes.get("sekke", 0.0))
+          }
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
           now = datetime.now(tehran_time)
           date_str = now.strftime("%Y/%m/%d - %H:%M")
 
-          data = {
-              "price": str(price_toman),
+          final_data = {
+              "price": str(gold18),
               "unit": "تومان",
               "updated_at": date_str,
-              "markets": {
-                  "gold18": price_toman,
-                  "gold24": price_24,
-                  "used18": price_used,
-                  "ons": None,
-                  "usd": None,
-                  "eur": None,
-                  "sekke": None
-              },
-              "changes": {
-                  "gold18": 0.0,
-                  "gold24": 0.0,
-                  "used18": 0.0,
-                  "ons": 0.0,
-                  "usd": 0.0,
-                  "eur": 0.0,
-                  "sekke": 0.0
-              }
+              "markets": markets,
+              "changes": changes
           }
 
-          Path("price.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-          print(f"Price updated successfully: {price_toman} Toman")
+          Path("price.json").write_text(json.dumps(final_data, ensure_ascii=False, indent=2), encoding="utf-8")
+          print("Updated successfully:")
+          print(json.dumps(final_data, ensure_ascii=False, indent=2))
           PY
 
-          rm -f geram18.html
+          rm -f tgju_main.html
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add price.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update prices [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update all markets [skip ci]" && git push)
