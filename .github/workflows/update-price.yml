@@ -51,10 +51,10 @@ jobs:
           def extract_data(filename, is_ons=False):
               p = Path(filename)
               if not p.exists():
-                  return None, 0.0
+                  return None, None
               html = p.read_text(encoding="utf-8", errors="ignore")
               if not html.strip():
-                  return None, 0.0
+                  return None, None
 
               # استخراج نرخ
               price = None
@@ -78,18 +78,18 @@ jobs:
                           pass
 
               # استخراج درصد تغییرات روزانه
-              change = 0.0
+              change = None
               change_patterns = [
                   r'<span[^>]*data-col=["\']change_percent["\'][^>]*>(.*?)</span>',
-                  r'<span[^>]*data-col=["\']change["\'][^>]*>(.*?)</span>',
-                  r'<td[^>]*class=["\'][^"\']*info-change[^"\']*["\'][^>]*>(.*?)</td>',
-                  r'class=["\'][^"\']*(?:change-percent|rate-change|info-change)[^"\']*["\'][^>]*>(.*?)<'
+                  r'<td[^>]*data-col=["\']change_percent["\'][^>]*>(.*?)</td>',
+                  r'<span[^>]*class=["\'][^"\']*(?:change-percent|rate-change|info-change)[^"\']*["\'][^>]*>(.*?)</span>',
+                  r'class=["\'][^"\']*(?:change_percent|change-percent|rate-change)[^"\']*["\'][^>]*>([^<]+)<'
               ]
               for cpat in change_patterns:
-                  cm = re.search(cpat, html, re.DOTALL)
+                  cm = re.search(cpat, html, re.DOTALL | re.IGNORECASE)
                   if cm:
                       txt = cm.group(1).strip()
-                      is_neg = any(w in txt for w in ["-", "low", "danger", "down", "drop"])
+                      is_neg = any(w in txt.lower() for w in ["-", "low", "danger", "down", "drop", "red"])
                       nums = re.findall(r'(\d+(?:[.,]\d+)?)', txt.replace('٫', '.'))
                       if nums:
                           try:
@@ -99,7 +99,7 @@ jobs:
                           except Exception:
                               pass
 
-              return price, round(change, 2)
+              return price, change
 
           p_gold18, c_gold18 = extract_data("geram18.html")
           p_ons, c_ons = extract_data("ons.html", is_ons=True)
@@ -116,21 +116,18 @@ jobs:
           old_m = old_data.get("markets", {})
           old_c = old_data.get("changes", {})
 
-          # تبدیل واحد ریال به تومان
           def to_toman(val, min_v, max_v, fallback):
               if not val:
                   return fallback
-              # در صورت ریال بودن، تبدیل به تومان
               toman = int(val // 10 if val > max_v else val)
               return toman if min_v <= toman <= (max_v * 10) else fallback
 
           final_gold18 = to_toman(p_gold18, 10000000, 100000000, old_m.get("gold18") or 23871100)
-          final_usd = to_toman(p_usd, 30000, 300000, old_m.get("usd") or 236010)
-          final_eur = to_toman(p_eur, 30000, 350000, old_m.get("eur"))
-          # بازه سکه بر حسب تومان
-          final_sekke = to_toman(p_sekke, 15000000, 350000000, old_m.get("sekke"))
+          final_usd = to_toman(p_usd, 30000, 300000, old_m.get("usd") or 234010)
+          final_eur = to_toman(p_eur, 30000, 350000, old_m.get("eur") or 266750)
+          final_sekke = to_toman(p_sekke, 15000000, 350000000, old_m.get("sekke") or 238480000)
 
-          final_ons = p_ons if (p_ons and 1000 <= p_ons <= 8000) else old_m.get("ons")
+          final_ons = p_ons if (p_ons and 1000 <= p_ons <= 8000) else (old_m.get("ons") or 4285.0)
 
           gold24 = int(final_gold18 * (24 / 18))
           used18 = int(final_gold18 * 0.985)
@@ -145,14 +142,20 @@ jobs:
               "sekke": final_sekke
           }
 
+          def get_change(new_val, key):
+              if new_val is not None:
+                  return round(float(new_val), 2)
+              return float(old_c.get(key, 0.0))
+
+          c_g18 = get_change(c_gold18, "gold18")
           changes = {
-              "gold18": c_gold18 if c_gold18 != 0.0 else old_c.get("gold18", 0.0),
-              "gold24": c_gold18 if c_gold18 != 0.0 else old_c.get("gold24", 0.0),
-              "used18": c_gold18 if c_gold18 != 0.0 else old_c.get("used18", 0.0),
-              "ons": c_ons if c_ons != 0.0 else old_c.get("ons", 0.0),
-              "usd": c_usd if c_usd != 0.0 else old_c.get("usd", 0.0),
-              "eur": c_eur if c_eur != 0.0 else old_c.get("eur", 0.0),
-              "sekke": c_sekke if c_sekke != 0.0 else old_c.get("sekke", 0.0)
+              "gold18": c_g18,
+              "gold24": c_g18,
+              "used18": c_g18,
+              "ons": get_change(c_ons, "ons"),
+              "usd": get_change(c_usd, "usd"),
+              "eur": get_change(c_eur, "eur"),
+              "sekke": get_change(c_sekke, "sekke")
           }
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
@@ -168,7 +171,7 @@ jobs:
           }
 
           Path("price.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-          print("JSON نهایی تولید شده:")
+          print("JSON نهایی ذخیره‌شده:")
           print(json.dumps(payload, ensure_ascii=False, indent=2))
           PY
 
@@ -179,4 +182,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add price.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Fix sekke URL to sekee and update price.json [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update prices and percentages [skip ci]" && git push)
