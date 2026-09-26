@@ -91,7 +91,6 @@
       background: rgba(255, 255, 255, 0.98);
     }
 
-    /* هدایت کارت‌ها به سمت راست برای دیده شدن تصویر مدل سمت چپ */
     .page {
       width: min(840px, calc(100% - 32px));
       margin-top: 16px;
@@ -287,47 +286,6 @@
       letter-spacing: -0.3px;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 14px 0 0;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      padding: 8px 20px;
-      border: 1px solid #d4be8a;
-      border-radius: 12px;
-      color: #634503;
-      background: rgba(255, 254, 250, 0.95);
-      font-size: 13.5px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-      transition: transform 0.2s, background 0.2s;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      background: #fffbf2;
-    }
-    .btn-primary {
-      border-color: #a8790b;
-      color: #fff;
-      background: linear-gradient(135deg, #a67b13, #c29c32);
-    }
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #8d680e, #b28a20);
-    }
-    .status {
-      margin: 8px 0 0;
-      color: #574d3f;
-      font-size: 12px;
-      text-align: center;
-    }
     .error-message {
       display: none;
       margin-top: 12px;
@@ -481,42 +439,35 @@
     <footer>
       <div class="footer-brand" aria-label="پرنس گلد گالری">
         <div class="brand-box">
-          <img src="ax/logo.png" alt="پرنس گلد گالری" class="brand-logo-img" class="change-item">
-          <span class="change-name">دلار</span>
-          <span class="change-data"><span id="c-usd">—</span><span id="a-usd" class="change-arrow">↑</span></span>
-        </div>
-
-        <div class="change-item">
-          <span class="change-name">طلای دست دوم</span>
-          <span class="change-data"><span id="c-used18">—</span><span id="a-used18" class="change-arrow">↑</span></span>
-        </div>
-
-        <div class="change-item">
-          <span class="change-name">طلای ۲۴ عیار</span>
-          <span class="change-data"><span id="c-gold24">—</span><span id="a-gold24" class="change-arrow">↑</span></span>
-        </div>
-
-        <div class="change-item">
-          <span class="change-name">طلای ۱۸ عیار</span>
-          <span class="change-data"><span id="c-gold18">—</span><span id="a-gold18" class="change-arrow">↑</span></span>
-        </div>
-
-        <div class="change-item">
-          <span class="change-name">انس طلا</span>
-          <span class="change-data"><span id="c-ons">—</span><span id="a-ons" class="change-arrow">↑</span></span>
+          <img src="ax/logo.png" alt="پرنس گلد گالری" class="brand-logo-img" onerror="this.style.display='none'">
+          <span class="brand-text">پرنس گلد گالری</span>
         </div>
       </div>
-    </section>
+    </footer>
+  </main>
 
-    <div id="error-message" class="error-message" role="alert">
-      دریافت قیمت با خطا مواجه شد. لطفاً چند لحظهٔ دیگر صفحه را رفرش کنید.
-    </div>
+  <script>
+    const $ = (id) => document.getElementById(id);
 
-    <footer>
-      <div class="footer-brand" aria-label="پرنس گلد گالری">
-        <div class="brand-box">
-          <img src="ax/logo.png" alt="پرنس گلد گالری" class="brand-logo-img" onerror="this.style.display='none'">
-          <span class="brand-text">پرنس گلد-US"));
+    function toPersianDigits(str) {
+      if (str === null || str === undefined) return "";
+      const p = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+      return String(str).replace(/[0-9]/g, (w) => p[+w]);
+    }
+
+    function toNumberSmart(value) {
+      if (value === null || value === undefined) return null;
+      if (typeof value === "number") return isNaN(value) ? null : value;
+      let s = String(value).trim();
+      s = s.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+      s = s.replace(/,/g, "");
+      const n = parseFloat(s);
+      return isNaN(n) ? null : n;
+    }
+
+    function formatMoney(val) {
+      if (val === null) return "—";
+      return toPersianDigits(val.toLocaleString("en-US"));
     }
 
     function formatFloat(n, digits = 1) {
@@ -543,7 +494,6 @@
     }
 
     async function fetchPrices() {
-      const statusEl = $("status-message");
       const errorEl = $("error-message");
 
       try {
@@ -555,7 +505,6 @@
 
         const data = await res.json();
 
-        // هم ساختار جدید (markets) و هم ساختار کنونی شما ({price: "23995800"}) را پشتیبانی می‌کند
         const m = data.markets ? data.markets : {};
         if (data.price !== undefined && m.gold18 === undefined) {
           m.gold18 = data.price;
@@ -583,12 +532,10 @@
         setChange("gold18", c.gold18);
         setChange("ons", c.ons);
 
-        if (statusEl) statusEl.textContent = "قیمت‌ها به‌روز است.";
         if (errorEl) errorEl.style.display = "none";
       } catch (e) {
         console.error(e);
         setText("update-time", "خطا در دریافت");
-        if (statusEl) statusEl.textContent = "خطا در به‌روزرسانی اطلاعات.";
         if (errorEl) errorEl.style.display = "block";
       }
     }
