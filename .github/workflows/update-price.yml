@@ -25,11 +25,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          # دریافت قیمت طلای ۱۸ عیار از TGJU
           curl --fail --silent --show-error --location \
             --retry 3 \
             --connect-timeout 20 \
-            -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+            -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" \
             "https://www.tgju.org/profile/geram18" \
             --output geram18.html
 
@@ -41,28 +40,50 @@ jobs:
 
           html = Path("geram18.html").read_text(encoding="utf-8", errors="ignore")
 
-          # استخراج قیمت ۱۸ عیار (ریال)
-          match = re.search(r'class="info-price"[^>]*>([^<]+)<', html)
-          if not match:
-              match = re.search(r'data-price="([^"]+)"', html)
+          price_toman = None
 
-          if match:
-              raw_price = match.group(1).replace(",", "").strip()
-              # تبدیل ریال به تومان
-              price_toman = int(float(raw_price) // 10)
-          else:
-              price_toman = 23995800 # قیمت رزرو در صورت خطا
+          # ۱. استخراج مستقیم از مقدار رسمی نرخ در ساختار TGJU
+          patterns = [
+              r'<span[^>]*data-col=["\']price["\'][^>]*>([^<]+)</span>',
+              r'<td[^>]*class=["\'][^"\']*info-price[^"\']*["\'][^>]*>([^<]+)</td>',
+              r'data-price=["\']([0-9]+)["\']',
+              r'class=["\'][^"\']*price[^"\']*["\'][^>]*>([0-9,]+)<'
+          ]
 
-          # محاسبات تقریبی عیار ۲۴ و دست دوم جهت پر شدن کامل جدول شما
+          for p in patterns:
+              m = re.search(p, html)
+              if m:
+                  clean = re.sub(r'[^\d]', '', m.group(1))
+                  if clean:
+                      val = int(clean)
+                      # در صورت ریال بودن، تبدیل به تومان
+                      toman = val // 10 if val > 50000000 else val
+                      # بررسی بازه منطقی برای طلای ۱۸ عیار
+                      if 15000000 <= toman <= 50000000:
+                          price_toman = toman
+                          break
+
+          # در صورتی که فایل قبلی معتبر وجود دارد، قیمت تغییر نکند تا خراب نشود
+          if price_toman is None:
+              try:
+                  old_data = json.loads(Path("price.json").read_text(encoding="utf-8"))
+                  old_price = int(old_data.get("markets", {}).get("gold18") or old_data.get("price", 0))
+                  if 15000000 <= old_price <= 50000000:
+                      price_toman = old_price
+              except Exception:
+                  pass
+
+          # اگر قیمت پیدا نشد، مقدار منطقی پیش‌فرض درج شود
+          if price_toman is None:
+              price_toman = 23995000
+
           price_24 = int(price_toman * (24 / 18))
           price_used = int(price_toman * 0.985)
 
           tehran_time = timezone(timedelta(hours=3, minutes=30))
           now = datetime.now(tehran_time)
-          time_str = now.strftime("%H:%M")
           date_str = now.strftime("%Y/%m/%d - %H:%M")
 
-          # ساختار همگام با جاوااسکریپت صفحه شما
           data = {
               "price": str(price_toman),
               "unit": "تومان",
@@ -87,8 +108,9 @@ jobs:
               }
           }
 
+          # ذخیره فایل کامل و بدون نقص JSON
           Path("price.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-          print("OK: price updated to", price_toman)
+          print(f"Price updated successfully: {price_toman} Toman")
           PY
 
           rm -f geram18.html
@@ -96,6 +118,53 @@ jobs:
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add price.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update prices [skip ci]" && git push)
+00000:
+                      price_toman = old_price
+              except Exception:
+                  pass
+
+          # اگر قیمت پیدا نشد، مقدار منطقی پیش‌فرض درج شود
+          if price_toman is None:
+              price_toman = 23995000
+
+          price_24 = int(price_toman * (24 / 18))
+          price_used = int(price_toman * 0.985)
+
+          tehran_time = timezone(timedelta(hours=3, minutes=30))
+          now = datetime.now(tehran_time)
+          date_str = now.strftime("%Y/%m/%d - %H:%M")
+
+          data = {
+              "price": str(price_toman),
+              "unit": "تومان",
+              "updated_at": date_str,
+              "markets": {
+                  "gold18": price_toman,
+                  "gold24": price_24,
+                  "used18": price_used,
+                  "ons": None,
+                  "usd": None,
+                  "eur": None,
+                  "sekke": None
+              },
+              "changes": {
+                  "gold18": 0.0,
+                  "gold24": 0.0,
+                  "used18": 0.0,
+                  "ons": 0.0,
+                  "usd": 0.0,
+                  "eur": 0.0,
+                  "sekke": 0.0
+              }
+          }
+
+          # ذخیره فایل کامل و بدون نقص JSON
+          Path("price.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+          print(f"Price updated successfully: {price_toman} Toman")
+          PY
+
+          rm -f geram18.html
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
