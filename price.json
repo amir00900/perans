@@ -1,23 +1,23 @@
 {
-  "price": "None",
+  "price": "714270",
   "unit": "تومان",
+  "updated_at": "2026/09/26 - 15:54",
   "markets": {
+    "gold18": 714270,
+    "gold24": 952360,
+    "used18": 703555,
+    "ons": null,
     "usd": null,
     "eur": null,
-    "sekke": null,
-    "ons": null,
-    "gold18": null,
-    "gold24": null,
-    "used18": null
+    "sekke": null
   },
   "changes": {
-    "usd": null,
-    "eur": null,
-    "sekke": null,
-    "ons": null,
-    "gold18": null,
-    "gold24": null,
-    "used18": null
-  },
-  "updated_at": "2026/09/26 - 15:51"
+    "gold18": 0.0,
+    "gold24": 0.0,
+    "used18": 0.0,
+    "ons": 0.0,
+    "usd": 0.0,
+    "eur": 0.0,
+    "sekke": 0.0
+  }
 }
