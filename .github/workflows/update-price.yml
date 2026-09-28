@@ -45,34 +45,47 @@ jobs:
           python3 - <<'PY'
           import json
           import re
-          from datetime import datetime, timedelta, timezone
+          from datetime import datetime
           from pathlib import Path
+          from zoneinfo import ZoneInfo
 
-          # تابع تبدیل میلادی به هجری شمسی (دقیق الگوریتمی بدون وابستگی خارجی)
+          # تابع تبدیل میلادی به هجری شمسی
           def gregorian_to_jalali(gy, gm, gd):
               g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
               gy2 = gy + 1 if gm > 2 else gy
-              days = 355666 + (365 * gy) + ((gy2 + 3) // 4) - ((gy2 + 99) // 100) + ((gy2 + 399) // 400) + gd + g_d_m[gm - 1]
+              days = (
+                  355666
+                  + (365 * gy)
+                  + ((gy2 + 3) // 4)
+                  - ((gy2 + 99) // 100)
+                  + ((gy2 + 399) // 400)
+                  + gd
+                  + g_d_m[gm - 1]
+              )
               jy = -1595 + (33 * (days // 12053))
               days %= 12053
               jy += 4 * (days // 1461)
               days %= 1461
+
               if days > 365:
                   jy += (days - 1) // 365
                   days = (days - 1) % 365
+
               if days < 186:
                   jm = 1 + (days // 31)
                   jd = 1 + (days % 31)
               else:
                   jm = 7 + ((days - 186) // 30)
                   jd = 1 + ((days - 186) % 30)
+
               return jy, jm, jd
 
           def extract_data(filename, is_ons=False):
-              p = Path(filename)
-              if not p.exists():
+              path = Path(filename)
+              if not path.exists():
                   return None, None
-              html = p.read_text(encoding="utf-8", errors="ignore")
+
+              html = path.read_text(encoding="utf-8", errors="ignore")
               if not html.strip():
                   return None, None
 
@@ -84,14 +97,15 @@ jobs:
                   r'data-price=["\']([0-9.]+)["\']',
                   r'class=["\'][^"\']*price[^"\']*["\'][^>]*>([0-9,.]+)<'
               ]
-              for pat in price_patterns:
-                  m = re.search(pat, html)
-                  if m:
-                      raw = m.group(1).replace(',', '').replace('٫', '.').strip()
+
+              for pattern in price_patterns:
+                  match = re.search(pattern, html)
+                  if match:
+                      raw = match.group(1).replace(",", "").replace("٫", ".").strip()
                       try:
-                          val = float(raw)
-                          if val > 0:
-                              price = val if is_ons else int(val)
+                          value = float(raw)
+                          if value > 0:
+                              price = value if is_ons else int(value)
                               break
                       except Exception:
                           pass
@@ -103,16 +117,24 @@ jobs:
                   r'<span[^>]*class=["\'][^"\']*(?:change-percent|rate-change|info-change)[^"\']*["\'][^>]*>(.*?)</span>',
                   r'class=["\'][^"\']*(?:change_percent|change-percent|rate-change)[^"\']*["\'][^>]*>([^<]+)<'
               ]
-              for cpat in change_patterns:
-                  cm = re.search(cpat, html, re.DOTALL | re.IGNORECASE)
-                  if cm:
-                      txt = cm.group(1).strip()
-                      is_neg = any(w in txt.lower() for w in ["-", "low", "danger", "down", "drop", "red"])
-                      nums = re.findall(r'(\d+(?:[.,]\d+)?)', txt.replace('٫', '.'))
-                      if nums:
+
+              for pattern in change_patterns:
+                  match = re.search(pattern, html, re.DOTALL | re.IGNORECASE)
+                  if match:
+                      text = match.group(1).strip()
+                      is_negative = any(
+                          word in text.lower()
+                          for word in ["-", "low", "danger", "down", "drop", "red"]
+                      )
+                      numbers = re.findall(
+                          r'(\d+(?:[.,]\d+)?)',
+                          text.replace("٫", ".")
+                      )
+
+                      if numbers:
                           try:
-                              v = float(nums[0].replace(',', '.'))
-                              change = -v if is_neg else v
+                              value = float(numbers[0].replace(",", "."))
+                              change = -value if is_negative else value
                               break
                           except Exception:
                               pass
@@ -127,25 +149,56 @@ jobs:
 
           old_data = {}
           try:
-              old_data = json.loads(Path("price.json").read_text(encoding="utf-8"))
+              old_data = json.loads(
+                  Path("price.json").read_text(encoding="utf-8")
+              )
           except Exception:
               pass
 
-          old_m = old_data.get("markets", {})
-          old_c = old_data.get("changes", {})
+          old_markets = old_data.get("markets", {})
+          old_changes = old_data.get("changes", {})
 
-          def to_toman(val, min_v, max_v, fallback):
-              if not val:
+          def to_toman(value, min_value, max_value, fallback):
+              if not value:
                   return fallback
-              toman = int(val // 10 if val > max_v else val)
-              return toman if min_v <= toman <= (max_v * 10) else fallback
 
-          final_gold18 = to_toman(p_gold18, 10000000, 100000000, old_m.get("gold18") or 23871100)
-          final_usd = to_toman(p_usd, 30000, 300000, old_m.get("usd") or 234010)
-          final_eur = to_toman(p_eur, 30000, 350000, old_m.get("eur") or 266750)
-          final_sekke = to_toman(p_sekke, 15000000, 350000000, old_m.get("sekke") or 238480000)
+              toman = int(value // 10 if value > max_value else value)
+              return (
+                  toman
+                  if min_value <= toman <= (max_value * 10)
+                  else fallback
+              )
 
-          final_ons = p_ons if (p_ons and 1000 <= p_ons <= 8000) else (old_m.get("ons") or 4285.0)
+          final_gold18 = to_toman(
+              p_gold18,
+              10_000_000,
+              100_000_000,
+              old_markets.get("gold18") or 23_871_100
+          )
+          final_usd = to_toman(
+              p_usd,
+              30_000,
+              300_000,
+              old_markets.get("usd") or 234_010
+          )
+          final_eur = to_toman(
+              p_eur,
+              30_000,
+              350_000,
+              old_markets.get("eur") or 266_750
+          )
+          final_sekke = to_toman(
+              p_sekke,
+              15_000_000,
+              350_000_000,
+              old_markets.get("sekke") or 238_480_000
+          )
+
+          final_ons = (
+              p_ons
+              if p_ons and 1_000 <= p_ons <= 8_000
+              else old_markets.get("ons") or 4_285.0
+          )
 
           gold24 = int(final_gold18 * (24 / 18))
           used18 = int(final_gold18 * 0.985)
@@ -160,27 +213,32 @@ jobs:
               "sekke": final_sekke
           }
 
-          def get_change(new_val, key):
-              if new_val is not None:
-                  return round(float(new_val), 2)
-              return float(old_c.get(key, 0.0))
+          def get_change(new_value, key):
+              if new_value is not None:
+                  return round(float(new_value), 2)
+              return float(old_changes.get(key, 0.0))
 
-          c_g18 = get_change(c_gold18, "gold18")
+          gold18_change = get_change(c_gold18, "gold18")
           changes = {
-              "gold18": c_g18,
-              "gold24": c_g18,
-              "used18": c_g18,
+              "gold18": gold18_change,
+              "gold24": gold18_change,
+              "used18": gold18_change,
               "ons": get_change(c_ons, "ons"),
               "usd": get_change(c_usd, "usd"),
               "eur": get_change(c_eur, "eur"),
               "sekke": get_change(c_sekke, "sekke")
           }
 
-          # محاسبه تاریخ شمسی و ساعت به وقت تهران
-          tehran_time = timezone(timedelta(hours=3, minutes=30))
-          now = datetime.now(tehran_time)
-          jy, jm, jd = gregorian_to_jalali(now.year, now.month, now.day)
-          date_str = f"{jy:04d}/{jm:02d}/{jd:02d} - {now.strftime('%H:%M')}"
+          # تاریخ شمسی و ساعت با منطقه زمانی رسمی تهران
+          now = datetime.now(ZoneInfo("Asia/Tehran"))
+          jy, jm, jd = gregorian_to_jalali(
+              now.year,
+              now.month,
+              now.day
+          )
+          date_str = (
+              f"{jy:04d}/{jm:02d}/{jd:02d} - {now.strftime('%H:%M')}"
+          )
 
           payload = {
               "price": str(final_gold18),
@@ -190,7 +248,11 @@ jobs:
               "changes": changes
           }
 
-          Path("price.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+          Path("price.json").write_text(
+              json.dumps(payload, ensure_ascii=False, indent=2),
+              encoding="utf-8"
+          )
+
           print(f"تاریخ شمسی ذخیره شده: {date_str}")
           print("JSON نهایی:")
           print(json.dumps(payload, ensure_ascii=False, indent=2))
