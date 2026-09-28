@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <title>قیمت لحظه‌ای طلا و سکه | پرنس گلد گالری</title>
-<meta name="description" content="مشاهده لحظه‌ای و آنلاین قیمت طلا ۱۸ عیار، سکه امامی و تمام بهار آزادی در گالری طلای پرنس.">
-<meta name="keywords" content="قیمت طلا, طلای ۱۸ عیار, طلا فروشی, پرنس گلد, قیمت لحظه ای سکه">
-
-  <link rel="icon" type="image/png" href="ax/logo.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f8f5ee" />
-  <title>قیمت لحظه‌ای طلا | پرنس گلد گالری</title>
+
+  <title>قیمت لحظه‌ای طلا و سکه | پرنس گلد گالری</title>
+  <meta name="description" content="مشاهده لحظه‌ای و آنلاین قیمت طلا ۱۸ عیار، سکه امامی و تمام بهار آزادی در گالری طلای پرنس.">
+  <meta name="keywords" content="قیمت طلا, طلای ۱۸ عیار, طلا فروشی, پرنس گلد, قیمت لحظه ای سکه">
+
+  <link rel="icon" type="image/png" href="ax/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -22,7 +25,11 @@
       --green: #568a55;
       --red: #bd4840;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -40,6 +47,7 @@
         url("ax/gold-price-bg.webp") left center / cover fixed no-repeat,
         #f4eee2;
     }
+
     .topbar {
       display: flex;
       align-items: center;
@@ -50,29 +58,34 @@
       background: rgba(255, 254, 250, 0.88);
       backdrop-filter: blur(10px);
     }
+
     .topbar-brand {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       text-decoration: none;
     }
+
     .topbar-logo {
       width: 36px;
       height: 36px;
       object-fit: contain;
       border-radius: 6px;
     }
+
     .topbar-title-wrap {
       display: flex;
       flex-direction: column;
       line-height: 1.25;
     }
+
     .topbar-brand-name {
       color: var(--gold-dark);
       font-size: 15px;
       font-weight: bold;
       letter-spacing: -0.2px;
     }
+
     .topbar-brand-sub {
       color: #8f7847;
       font-family: Georgia, serif;
@@ -80,6 +93,7 @@
       letter-spacing: 1.5px;
       font-weight: 600;
     }
+
     .topbar-back {
       color: var(--gold-dark);
       font-size: 13px;
@@ -91,6 +105,7 @@
       border: 1px solid rgba(191, 165, 108, 0.35);
       transition: all 0.2s ease;
     }
+
     .topbar-back:hover {
       color: #4a3403;
       background: rgba(255, 255, 255, 0.98);
@@ -103,16 +118,19 @@
       margin-right: clamp(16px, 6vw, 80px);
       margin-left: auto;
     }
+
     .heading {
       margin: 0 auto 14px;
       text-align: center;
     }
+
     h1 {
       margin: 0;
       color: #44351b;
       font-size: 38px;
       letter-spacing: -1.5px;
     }
+
     .ornament {
       display: flex;
       align-items: center;
@@ -122,27 +140,33 @@
       margin: 8px auto;
       color: var(--gold-light);
     }
-    .ornament::before, .ornament::after {
+
+    .ornament::before,
+    .ornament::after {
       height: 1px;
       flex: 1;
       content: "";
       background: linear-gradient(90deg, transparent, var(--gold-light));
     }
+
     .ornament::after {
       background: linear-gradient(90deg, var(--gold-light), transparent);
     }
+
     .diamond {
       font-size: 21px;
       line-height: 1;
     }
+
     .date-line {
       margin: 0;
       color: var(--muted);
       font-size: 13.5px;
     }
+
     .date-line strong {
       color: var(--ink);
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .market-grid {
@@ -150,6 +174,7 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
+
     .market-card {
       position: relative;
       padding: 60px 18px 14px;
@@ -160,6 +185,7 @@
       box-shadow: 0 12px 30px rgba(93, 69, 22, 0.08);
       backdrop-filter: blur(8px);
     }
+
     .market-title {
       position: absolute;
       top: 0;
@@ -180,7 +206,11 @@
       font-weight: 500;
       text-align: center;
     }
-    .market-title .icon { font-size: 18px; }
+
+    .market-title .icon {
+      font-size: 18px;
+    }
+
     .price-row {
       display: flex;
       align-items: center;
@@ -189,16 +219,29 @@
       min-height: 50px;
       border-bottom: 1px solid var(--line);
     }
-    .price-row:last-of-type { border-bottom: 0; }
-    .price-name { font-size: 14.5px; font-weight: 500; }
+
+    .price-row:last-of-type {
+      border-bottom: 0;
+    }
+
+    .price-name {
+      font-size: 14.5px;
+      font-weight: 500;
+    }
+
     .price-value {
       min-width: 120px;
       padding: 7px 12px;
       border-radius: 9px;
       color: #5c471c;
       background: #f4eee2;
-      font-size: 14.5px;
-      font-weight: bold;
+      font-family: "Vazirmatn", Tahoma, sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.8;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      letter-spacing: 0;
       text-align: center;
       white-space: nowrap;
     }
@@ -212,6 +255,7 @@
       box-shadow: 0 10px 24px rgba(93, 69, 22, 0.06);
       backdrop-filter: blur(8px);
     }
+
     .change-heading {
       width: min(320px, 90%);
       margin: 0 auto 12px;
@@ -222,16 +266,22 @@
       font-size: 13.5px;
       text-align: center;
     }
+
     .change-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
     }
+
     .change-item {
       padding: 4px 6px 0;
       border-left: 1px solid var(--line);
       text-align: center;
     }
-    .change-item:last-child { border-left: 0; }
+
+    .change-item:last-child {
+      border-left: 0;
+    }
+
     .change-name {
       display: block;
       min-height: 26px;
@@ -239,6 +289,7 @@
       font-size: 11.5px;
       line-height: 1.6;
     }
+
     .change-data {
       display: flex;
       align-items: center;
@@ -246,14 +297,25 @@
       gap: 4px;
       margin-top: 4px;
       color: var(--muted);
-      font-size: 13.5px;
+      font-family: "Vazirmatn", Tahoma, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.8;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      letter-spacing: 0;
     }
+
     .change-arrow {
       color: var(--green);
+      font-family: Tahoma, Arial, sans-serif;
       font-size: 18px;
       line-height: 1;
     }
-    .change-arrow.down { color: var(--red); }
+
+    .change-arrow.down {
+      color: var(--red);
+    }
 
     .footer-brand {
       display: flex;
@@ -263,15 +325,19 @@
       margin: 18px auto 0;
       color: var(--gold-light);
     }
-    .footer-brand::before, .footer-brand::after {
+
+    .footer-brand::before,
+    .footer-brand::after {
       height: 1px;
       flex: 1;
       content: "";
       background: linear-gradient(90deg, transparent, var(--gold-light));
     }
+
     .footer-brand::after {
       background: linear-gradient(90deg, var(--gold-light), transparent);
     }
+
     .brand-box {
       display: flex;
       flex-direction: column;
@@ -279,11 +345,13 @@
       gap: 5px;
       text-align: center;
     }
+
     .brand-logo-img {
       max-width: 54px;
       max-height: 54px;
       object-fit: contain;
     }
+
     .brand-text {
       color: #634503;
       font-size: 16px;
@@ -310,6 +378,7 @@
         margin-left: auto;
       }
     }
+
     @media (max-width: 760px) {
       body {
         background:
@@ -317,17 +386,49 @@
           url("ax/gold-price-bg.webp") center center / cover no-repeat,
           #f4eee2;
       }
-      .page { width: min(580px, calc(100% - 20px)); margin: 14px auto; }
-      h1 { font-size: clamp(28px, 6vw, 36px); }
-      .change-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 12px; }
-      .change-item:nth-child(4) { border-left: 0; }
+
+      .page {
+        width: min(580px, calc(100% - 20px));
+        margin: 14px auto;
+      }
+
+      h1 {
+        font-size: clamp(28px, 6vw, 36px);
+      }
+
+      .change-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        row-gap: 12px;
+      }
+
+      .change-item:nth-child(4) {
+        border-left: 0;
+      }
     }
+
     @media (max-width: 480px) {
-      .topbar { min-height: 48px; padding: 8px 12px; }
-      .market-grid { grid-template-columns: 1fr; gap: 12px; }
-      .change-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 12px; }
-      .change-item:nth-child(odd) { border-left: 1px solid var(--line); }
-      .change-item:nth-child(even) { border-left: 0; }
+      .topbar {
+        min-height: 48px;
+        padding: 8px 12px;
+      }
+
+      .market-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .change-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 12px;
+      }
+
+      .change-item:nth-child(odd) {
+        border-left: 1px solid var(--line);
+      }
+
+      .change-item:nth-child(even) {
+        border-left: 0;
+      }
     }
   </style>
 </head>
