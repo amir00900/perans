@@ -108,6 +108,33 @@
 
     .topbar-back:hover {
       color: #4a3403;
+      background: rgba(255, 2;
+      font-weight: bold;
+      letter-spacing: -0.2px;
+    }
+
+    .topbar-brand-sub {
+      color: #8f7847;
+      font-family: Georgia, serif;
+      font-size: 10.5px;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+    }
+
+    .topbar-back {
+      color: var(--gold-dark);
+      font-size: 13px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 7px 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(191, 165, 108, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .topbar-back:hover {
+      color: #4a3403;
       background: rgba(255, 255, 255, 0.98);
     }
 
@@ -134,44 +161,7 @@
     .ornament {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 14px;
-      width: min(560px, 90%);
-      margin: 8px auto;
-      color: var(--gold-light);
-    }
-
-    .ornament::before,
-    .ornament::after {
-      height: 1px;
-      flex: 1;
-      content: "";
-      background: linear-gradient(90deg, transparent, var(--gold-light));
-    }
-
-    .ornament::after {
-      background: linear-gradient(90deg, var(--gold-light), transparent);
-    }
-
-    .diamond {
-      font-size: 21px;
-      line-height: 1;
-    }
-
-    .date-line {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13.5px;
-    }
-
-    .date-line strong {
-      color: var(--ink);
-      font-weight: 700;
-    }
-
-    .market-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      , 1fr));
       gap: 14px;
     }
 
@@ -307,14 +297,10 @@
     }
 
     .change-arrow {
-      color: var(--green);
       font-family: Tahoma, Arial, sans-serif;
       font-size: 18px;
       line-height: 1;
-    }
-
-    .change-arrow.down {
-      color: var(--red);
+      font-weight: bold;
     }
 
     .footer-brand {
@@ -503,37 +489,37 @@
       <div class="change-grid">
         <div class="change-item">
           <span class="change-name">سکه</span>
-          <span class="change-data"><span id="c-sekke">—</span><span id="a-sekke" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-sekke">—</span><span id="a-sekke" class="change-arrow"></span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">یورو</span>
-          <span class="change-data"><span id="c-eur">—</span><span id="a-eur" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-eur">—</span><span id="a-eur" class="change-arrow"></span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">دلار</span>
-          <span class="change-data"><span id="c-usd">—</span><span id="a-usd" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-usd">—</span><span id="a-usd" class="change-arrow"></span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">طلای دست دوم</span>
-          <span class="change-data"><span id="c-used18">—</span><span id="a-used18" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-used18">—</span><span id="a-used18" class="change-arrow"></span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">طلای ۲۴ عیار</span>
-          <span class="change-data"><span id="c-gold24">—</span><span id="a-gold24" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-gold24">—</span><span id="a-gold24" class="change-arrow"></span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">طلای ۱۸ عیار</span>
-          <span class="change-data"><span id="c-gold18">—</span><span id="a-gold18" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-gold18">—</span><span id="a-gold18" class="change-arrow"></span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">انس طلا</span>
-          <span class="change-data"><span id="c-ons">—</span><span id="a-ons" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-ons">—</span><span id="a-ons" class="change-arrow"></span></span>
         </div>
       </div>
     </section>
@@ -588,14 +574,29 @@
 
     function setChange(key, value) {
       const v = toNumberSmart(value);
-      const txt = v === null ? "—" : toPersianDigits(Math.abs(v).toFixed(2)) + "%";
+      const arrow = $("a-" + key);
+
+      if (v === null || isNaN(v)) {
+        setText("c-" + key, "—");
+        if (arrow) arrow.textContent = "";
+        return;
+      }
+
+      // درج درصد با ارقام فارسی
+      const txt = toPersianDigits(Math.abs(v).toFixed(2)) + "%";
       setText("c-" + key, txt);
 
-      const arrow = $("a-" + key);
       if (arrow) {
-        const down = v !== null && v < 0;
-        arrow.textContent = down ? "↓" : "↑";
-        arrow.classList.toggle("down", down);
+        if (v < 0) {
+          arrow.textContent = "↓";
+          arrow.style.color = "var(--red)";
+        } else if (v > 0) {
+          arrow.textContent = "↑";
+          arrow.style.color = "var(--green)";
+        } else {
+          arrow.textContent = "-";
+          arrow.style.color = "var(--muted)";
+        }
       }
     }
 
