@@ -201,7 +201,7 @@ jobs:
           tehran_offset = timezone(timedelta(hours=3, minutes=30))
           now = datetime.now(tehran_offset)
           jy, jm, jd = gregorian_to_jalali(now.year, now.month, now.day)
-          date_str = f"{jy:04d}/{jm:02d}/{jd:02d} - {now.strftime('%H:%M')}"
+          date_str = f"{jy:04d}/{jm:02d}/{jd:02d}"
 
           payload = {
               "price": str(final_gold18), 
