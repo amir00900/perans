@@ -651,7 +651,13 @@
           m.gold18 = data.price;
         }
 
-        setText("update-time", data.updated_at ? toPersianDigits(data.updated_at) : "امروز");
+        // فقط نمایش تاریخ شمسی و حذف قطعی ساعت حتی در صورت وجود در JSON
+        if (data.updated_at) {
+          var dateOnly = String(data.updated_at).split(" - ")[0].trim();
+          setText("update-time", toPersianDigits(dateOnly));
+        } else {
+          setText("update-time", "امروز");
+        }
 
         setText("p-usd", formatMoney(toNumberSmart(m.usd)));
         setText("p-eur", formatMoney(toNumberSmart(m.eur)));
