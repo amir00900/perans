@@ -22,8 +22,8 @@
       --ink: #2b2317;
       --muted: #6e6557;
       --line: #e8ddc7;
-      --green: #568a55;
-      --red: #bd4840;
+      --green: #2e7d32;
+      --red: #c62828;
     }
 
     * {
@@ -311,10 +311,15 @@
       font-family: Tahoma, Arial, sans-serif;
       font-size: 18px;
       line-height: 1;
+      font-weight: bold;
     }
 
     .change-arrow.down {
       color: var(--red);
+    }
+
+    .change-arrow.flat {
+      color: var(--muted);
     }
 
     .footer-brand {
@@ -588,14 +593,32 @@
 
     function setChange(key, value) {
       const v = toNumberSmart(value);
-      const txt = v === null ? "—" : toPersianDigits(Math.abs(v).toFixed(2)) + "%";
+      const arrow = $("a-" + key);
+
+      if (v === null) {
+        setText("c-" + key, "—");
+        if (arrow) {
+          arrow.textContent = "—";
+          arrow.className = "change-arrow flat";
+        }
+        return;
+      }
+
+      // نمایش درصد با عدد مثبت
+      const txt = toPersianDigits(Math.abs(v).toFixed(2)) + "٪";
       setText("c-" + key, txt);
 
-      const arrow = $("a-" + key);
       if (arrow) {
-        const down = v !== null && v < 0;
-        arrow.textContent = down ? "↓" : "↑";
-        arrow.classList.toggle("down", down);
+        if (v < 0) {
+          arrow.textContent = "↓";
+          arrow.className = "change-arrow down";
+        } else if (v > 0) {
+          arrow.textContent = "↑";
+          arrow.className = "change-arrow";
+        } else {
+          arrow.textContent = "▬";
+          arrow.className = "change-arrow flat";
+        }
       }
     }
 
