@@ -298,8 +298,8 @@
       margin-top: 4px;
       color: var(--muted);
       font-family: "Vazirmatn", Tahoma, sans-serif;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 700;
       line-height: 1.8;
       font-variant-numeric: tabular-nums;
       font-feature-settings: "tnum";
@@ -307,11 +307,14 @@
     }
 
     .change-arrow {
-      color: var(--green);
       font-family: Tahoma, Arial, sans-serif;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 1;
       font-weight: bold;
+    }
+
+    .change-arrow.up {
+      color: var(--green);
     }
 
     .change-arrow.down {
@@ -508,37 +511,37 @@
       <div class="change-grid">
         <div class="change-item">
           <span class="change-name">سکه</span>
-          <span class="change-data"><span id="c-sekke">—</span><span id="a-sekke" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-sekke">—</span><span id="a-sekke" class="change-arrow flat">—</span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">یورو</span>
-          <span class="change-data"><span id="c-eur">—</span><span id="a-eur" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-eur">—</span><span id="a-eur" class="change-arrow flat">—</span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">دلار</span>
-          <span class="change-data"><span id="c-usd">—</span><span id="a-usd" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-usd">—</span><span id="a-usd" class="change-arrow flat">—</span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">طلای دست دوم</span>
-          <span class="change-data"><span id="c-used18">—</span><span id="a-used18" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-used18">—</span><span id="a-used18" class="change-arrow flat">—</span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">طلای ۲۴ عیار</span>
-          <span class="change-data"><span id="c-gold24">—</span><span id="a-gold24" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-gold24">—</span><span id="a-gold24" class="change-arrow flat">—</span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">طلای ۱۸ عیار</span>
-          <span class="change-data"><span id="c-gold18">—</span><span id="a-gold18" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-gold18">—</span><span id="a-gold18" class="change-arrow flat">—</span></span>
         </div>
 
         <div class="change-item">
           <span class="change-name">انس طلا</span>
-          <span class="change-data"><span id="c-ons">—</span><span id="a-ons" class="change-arrow">↑</span></span>
+          <span class="change-data"><span id="c-ons">—</span><span id="a-ons" class="change-arrow flat">—</span></span>
         </div>
       </div>
     </section>
@@ -558,21 +561,23 @@
   </main>
 
   <script>
-    const $ = (id) => document.getElementById(id);
+    function $(id) {
+      return document.getElementById(id);
+    }
 
     function toPersianDigits(str) {
       if (str === null || str === undefined) return "";
-      const p = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-      return String(str).replace(/[0-9]/g, (w) => p[+w]);
+      var p = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+      return String(str).replace(/[0-9]/g, function (w) { return p[+w]; });
     }
 
     function toNumberSmart(value) {
       if (value === null || value === undefined) return null;
       if (typeof value === "number") return isNaN(value) ? null : value;
-      let s = String(value).trim();
-      s = s.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+      var s = String(value).trim();
+      s = s.replace(/[۰-۹]/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹".indexOf(d); });
       s = s.replace(/,/g, "");
-      const n = parseFloat(s);
+      var n = parseFloat(s);
       return isNaN(n) ? null : n;
     }
 
@@ -581,58 +586,70 @@
       return toPersianDigits(val.toLocaleString("en-US"));
     }
 
-    function formatFloat(n, digits = 1) {
+    function formatFloat(n, digits) {
       if (n === null) return "—";
+      digits = digits || 1;
       return toPersianDigits(Number(n).toFixed(digits));
     }
 
     function setText(id, text) {
-      const el = $(id);
+      var el = $(id);
       if (el) el.textContent = text;
     }
+
     function setChange(key, value) {
-  const v = toNumberSmart(value);
-  const arrow = $("a-" + key);
-  const textEl = $("c-" + key);
+      var v = toNumberSmart(value);
+      var arrow = $("a-" + key);
+      var textEl = $("c-" + key);
 
-  if (v === null || isNaN(v)) {
-    setText("c-" + key, "—");
-    if (arrow) {
-      arrow.textContent = "—";
-      arrow.className = "change-arrow flat";
+      if (v === null || isNaN(v)) {
+        setText("c-" + key, "—");
+        if (arrow) {
+          arrow.textContent = "—";
+          arrow.className = "change-arrow flat";
+        }
+        if (textEl) textEl.style.color = "var(--muted)";
+        return;
+      }
+
+      var formatted = toPersianDigits(Math.abs(v).toFixed(2)) + "٪";
+      setText("c-" + key, formatted);
+
+      if (v < 0) {
+        if (arrow) {
+          arrow.textContent = "↓";
+          arrow.className = "change-arrow down";
+        }
+        if (textEl) textEl.style.color = "var(--red)";
+      } else if (v > 0) {
+        if (arrow) {
+          arrow.textContent = "↑";
+          arrow.className = "change-arrow up";
+        }
+        if (textEl) textEl.style.color = "var(--green)";
+      } else {
+        if (arrow) {
+          arrow.textContent = "▬";
+          arrow.className = "change-arrow flat";
+        }
+        if (textEl) textEl.style.color = "var(--muted)";
+      }
     }
-    return;
-  }
 
-  // اضافه کردن صریح علامت مثبت و منفی به درصد
-  let sign = "";
-  if (v > 0) {
-    sign = "+";
-  } else if (v < 0) {
-    sign = "-";
-  }
+    async function fetchPrices() {
+      var errorEl = $("error-message");
+      try {
+        var res = await fetch("price.json?nocache=" + new Date().getTime(), {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" }
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
 
-  const absVal = Math.abs(v).toFixed(2);
-  const txt = sign + toPersianDigits(absVal) + "٪";
-  setText("c-" + key, txt);
-
-  if (arrow) {
-    if (v < 0) {
-      arrow.textContent = "↓";
-      arrow.className = "change-arrow down";
-      if (textEl) textEl.style.color = "var(--red)";
-    } else if (v > 0) {
-      arrow.textContent = "↑";
-      arrow.className = "change-arrow";
-      if (textEl) textEl.style.color = "var(--green)";
-    } else {
-      arrow.textContent = "▬";
-      arrow.className = "change-arrow flat";
-      if (textEl) textEl.style.color = "var(--muted)";
-    }
-  }
-}
-
+        var data = await res.json();
+        var m = data.markets ? data.markets : {};
+        if (data.price !== undefined && m.gold18 === undefined) {
+          m.gold18 = data.price;
+        }
 
         setText("update-time", data.updated_at ? toPersianDigits(data.updated_at) : "امروز");
 
@@ -640,14 +657,14 @@
         setText("p-eur", formatMoney(toNumberSmart(m.eur)));
         setText("p-sekke", formatMoney(toNumberSmart(m.sekke)));
 
-        const ons = toNumberSmart(m.ons);
+        var ons = toNumberSmart(m.ons);
         setText("p-ons", ons === null ? "—" : formatFloat(ons, 1));
 
         setText("p-gold18", formatMoney(toNumberSmart(m.gold18)));
         setText("p-gold24", formatMoney(toNumberSmart(m.gold24)));
         setText("p-used18", formatMoney(toNumberSmart(m.used18)));
 
-        const c = data.changes || {};
+        var c = data.changes || {};
         setChange("sekke", c.sekke);
         setChange("eur", c.eur);
         setChange("usd", c.usd);
@@ -658,7 +675,7 @@
 
         if (errorEl) errorEl.style.display = "none";
       } catch (e) {
-        console.error(e);
+        console.error("Fetch error:", e);
         setText("update-time", "خطا در دریافت");
         if (errorEl) errorEl.style.display = "block";
       }
