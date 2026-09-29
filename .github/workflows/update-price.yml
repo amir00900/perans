@@ -21,6 +21,8 @@ jobs:
           python-version: '3.11'
 
       - name: Fetch markets and update price.json
+        env:
+          TZ: "Asia/Tehran"
         shell: bash
         run: |
           set -euo pipefail
@@ -45,9 +47,8 @@ jobs:
           python3 - <<'PY'
           import json
           import re
-          from datetime import datetime
+          from datetime import datetime, timezone, timedelta
           from pathlib import Path
-          from zoneinfo import ZoneInfo
 
           # تابع تبدیل میلادی به هجری شمسی
           def gregorian_to_jalali(gy, gm, gd):
@@ -93,6 +94,21 @@ jobs:
               price_patterns = [
                   r'<span[^>]*data-col=["\']price["\'][^>]*>([^<]+)</span>',
                   r'<span[^>]*class=["\'][^"\']*value[^"\']*["\'][^>]*>([^<]+)</span>',
+                  r'<td[^>]*class=["\'][^"\']*info-price[^"\']*["\'][^>]*>([^<]+)</td>',, jm, jd
+
+          def extract_data(filename, is_ons=False):
+              path = Path(filename)
+              if not path.exists():
+                  return None, None
+
+              html = path.read_text(encoding="utf-8", errors="ignore")
+              if not html.strip():
+                  return None, None
+
+              price = None
+              price_patterns = [
+                  r'<span[^>]*data-col=["\']price["\'][^>]*>([^<]+)</span>',
+                  r'<span[^>]*class=["\'][^"\']*value[^"\']*["\'][^>]*>([^<]+)</span>',
                   r'<td[^>]*class=["\'][^"\']*info-price[^"\']*["\'][^>]*>([^<]+)</td>',
                   r'data-price=["\']([0-9.]+)["\']',
                   r'class=["\'][^"\']*price[^"\']*["\'][^>]*>([0-9,.]+)<'
@@ -119,27 +135,7 @@ jobs:
               ]
 
               for pattern in change_patterns:
-                  match = re.search(pattern, html, re.DOTALL | re.IGNORECASE)
-                  if match:
-                      text = match.group(1).strip()
-                      is_negative = any(
-                          word in text.lower()
-                          for word in ["-", "low", "danger", "down", "drop", "red"]
-                      )
-                      numbers = re.findall(
-                          r'(\d+(?:[.,]\d+)?)',
-                          text.replace("٫", ".")
-                      )
-
-                      if numbers:
-                          try:
-                              value = float(numbers[0].replace(",", "."))
-                              change = -value if is_negative else value
-                              break
-                          except Exception:
-                              pass
-
-              return price, change
+                  match =return price, change
 
           p_gold18, c_gold18 = extract_data("geram18.html")
           p_ons, c_ons = extract_data("ons.html", is_ons=True)
@@ -149,9 +145,7 @@ jobs:
 
           old_data = {}
           try:
-              old_data = json.loads(
-                  Path("price.json").read_text(encoding="utf-8")
-              )
+              old_data = json.loads(Path("price.json").read_text(encoding="utf-8"))
           except Exception:
               pass
 
@@ -163,42 +157,14 @@ jobs:
                   return fallback
 
               toman = int(value // 10 if value > max_value else value)
-              return (
-                  toman
-                  if min_value <= toman <= (max_value * 10)
-                  else fallback
-              )
+              return toman if min_value <= toman <= (max_value * 10) else fallback
 
-          final_gold18 = to_toman(
-              p_gold18,
-              10_000_000,
-              100_000_000,
-              old_markets.get("gold18") or 23_871_100
-          )
-          final_usd = to_toman(
-              p_usd,
-              30_000,
-              300_000,
-              old_markets.get("usd") or 234_010
-          )
-          final_eur = to_toman(
-              p_eur,
-              30_000,
-              350_000,
-              old_markets.get("eur") or 266_750
-          )
-          final_sekke = to_toman(
-              p_sekke,
-              15_000_000,
-              350_000_000,
-              old_markets.get("sekke") or 238_480_000
-          )
+          final_gold18 = to_toman(p_gold18, 10_000_000, 100_000_000, old_markets.get("gold18") or 23_871_100)
+          final_usd = to_toman(p_usd, 30_000, 300_000, old_markets.get("usd") or 234_010)
+          final_eur = to_toman(p_eur, 30_000, 350_000, old_markets.get("eur") or 266_750)
+          final_sekke = to_toman(p_sekke, 15_000_000, 350_000_000, old_markets.get("sekke") or 238_480_000)
 
-          final_ons = (
-              p_ons
-              if p_ons and 1_000 <= p_ons <= 8_000
-              else old_markets.get("ons") or 4_285.0
-          )
+          final_ons = p_ons if p_ons and 1_000 <= p_ons <= 8_000 else old_markets.get("ons") or 4_285.0
 
           gold24 = int(final_gold18 * (24 / 18))
           used18 = int(final_gold18 * 0.985)
@@ -229,16 +195,11 @@ jobs:
               "sekke": get_change(c_sekke, "sekke")
           }
 
-          # تاریخ شمسی و ساعت با منطقه زمانی رسمی تهران
-          now = datetime.now(ZoneInfo("Asia/Tehran"))
-          jy, jm, jd = gregorian_to_jalali(
-              now.year,
-              now.month,
-              now.day
-          )
-          date_str = (
-              f"{jy:04d}/{jm:02d}/{jd:02d} - {now.strftime('%H:%M')}"
-          )
+          # محاسبه صریح ساعت رسمی تهران (UTC + 03:30) بدون وابستگی به تایم‌زون سرور
+          tehran_offset = timezone(timedelta(hours=3, minutes=30))
+          now = datetime.now(tehran_offset)
+          jy, jm, jd = gregorian_to_jalali(now.year, now.month, now.day)
+          date_str = f"{jy:04d}/{jm:02d}/{jd:02d} - {now.strftime('%H:%M')}"
 
           payload = {
               "price": str(final_gold18),
@@ -253,7 +214,7 @@ jobs:
               encoding="utf-8"
           )
 
-          print(f"تاریخ شمسی ذخیره شده: {date_str}")
+          print(f"تاریخ و ساعت ذخیره شده تهران: {date_str}")
           print("JSON نهایی:")
           print(json.dumps(payload, ensure_ascii=False, indent=2))
           PY
