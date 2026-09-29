@@ -590,54 +590,49 @@
       const el = $(id);
       if (el) el.textContent = text;
     }
-
     function setChange(key, value) {
-      const v = toNumberSmart(value);
-      const arrow = $("a-" + key);
+  const v = toNumberSmart(value);
+  const arrow = $("a-" + key);
+  const textEl = $("c-" + key);
 
-      if (v === null) {
-        setText("c-" + key, "—");
-        if (arrow) {
-          arrow.textContent = "—";
-          arrow.className = "change-arrow flat";
-        }
-        return;
-      }
-
-      // نمایش درصد با عدد مثبت
-      const txt = toPersianDigits(Math.abs(v).toFixed(2)) + "٪";
-      setText("c-" + key, txt);
-
-      if (arrow) {
-        if (v < 0) {
-          arrow.textContent = "↓";
-          arrow.className = "change-arrow down";
-        } else if (v > 0) {
-          arrow.textContent = "↑";
-          arrow.className = "change-arrow";
-        } else {
-          arrow.textContent = "▬";
-          arrow.className = "change-arrow flat";
-        }
-      }
+  if (v === null || isNaN(v)) {
+    setText("c-" + key, "—");
+    if (arrow) {
+      arrow.textContent = "—";
+      arrow.className = "change-arrow flat";
     }
+    return;
+  }
 
-    async function fetchPrices() {
-      const errorEl = $("error-message");
+  // اضافه کردن صریح علامت مثبت و منفی به درصد
+  let sign = "";
+  if (v > 0) {
+    sign = "+";
+  } else if (v < 0) {
+    sign = "-";
+  }
 
-      try {
-        const res = await fetch("price.json?nocache=" + Date.now(), {
-          cache: "no-store",
-          headers: { "Cache-Control": "no-cache" },
-        });
-        if (!res.ok) throw new Error("HTTP " + res.status);
+  const absVal = Math.abs(v).toFixed(2);
+  const txt = sign + toPersianDigits(absVal) + "٪";
+  setText("c-" + key, txt);
 
-        const data = await res.json();
+  if (arrow) {
+    if (v < 0) {
+      arrow.textContent = "↓";
+      arrow.className = "change-arrow down";
+      if (textEl) textEl.style.color = "var(--red)";
+    } else if (v > 0) {
+      arrow.textContent = "↑";
+      arrow.className = "change-arrow";
+      if (textEl) textEl.style.color = "var(--green)";
+    } else {
+      arrow.textContent = "▬";
+      arrow.className = "change-arrow flat";
+      if (textEl) textEl.style.color = "var(--muted)";
+    }
+  }
+}
 
-        const m = data.markets ? data.markets : {};
-        if (data.price !== undefined && m.gold18 === undefined) {
-          m.gold18 = data.price;
-        }
 
         setText("update-time", data.updated_at ? toPersianDigits(data.updated_at) : "امروز");
 
