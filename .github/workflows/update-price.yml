@@ -86,7 +86,7 @@ jobs:
               html = path.read_text(encoding="utf-8", errors="ignore")
               if not html.strip(): return None, None
 
-              # استخراج قیمت
+              # ۱. استخراج قیمت
               price = None
               price_patterns = [
                   r'<span[^>]*data-col=["\']price["\'][^>]*>([^<]+)</span>',
@@ -106,28 +106,37 @@ jobs:
                               break
                       except: pass
 
-              # استخراج تغییرات درصد (تشخیص دقیق منفی یا مثبت بودن)
+              # ۲. استخراج تغییرات درصد با تفکیک دقیق مثبت/منفی
               change = None
               change_patterns = [
-                  r'(<(?:span|td)[^>]*data-col=["\']change_percent["\'][^>]*>.*?<\/(?:span|td)>)',
-                  r'(<(?:span|td)[^>]*class=["\'][^"\']*(?:change-percent|rate-change|info-change)[^"\']*["\'][^>]*>.*?<\/(?:span|td)>)',
-                  r'(<tr[^>]*>.*?change_percent.*?<\/tr>)'
+                  r'<span[^>]*data-col=["\']change_percent["\'][^>]*>(.*?)</span>',
+                  r'<td[^>]*data-col=["\']change_percent["\'][^>]*>(.*?)</td>',
+                  r'<span[^>]*class=["\'][^"\']*(?:change-percent|rate-change)[^"\']*["\'][^>]*>(.*?)</span>'
               ]
               for pattern in change_patterns:
                   match = re.search(pattern, html, re.DOTALL | re.IGNORECASE)
                   if match:
-                      full_tag = match.group(1)
-                      # بررسی نشانه‌های منفی در متن و کلاس‌های تگ
-                      is_negative = bool(
-                          re.search(r'\b(low|down|danger|drop|red|decrease|minus)\b', full_tag, re.IGNORECASE) or
-                          "-" in full_tag or "−" in full_tag
-                      )
+                      inner_content = match.group(1)
+                      inner_text = re.sub(r'<[^>]+>', ' ', inner_content).strip()
                       
-                      numbers = re.findall(r'(\d+(?:[.,]\d+)?)', full_tag.replace("٫", "."))
+                      # چک کردن نشانه‌های مثبت و منفی در متن
+                      is_explicit_negative = ("-" in inner_text or "−" in inner_text)
+                      is_explicit_positive = ("+" in inner_text)
+
+                      # چک کردن کلاس تگ کامل برای high/low
+                      is_class_down = bool(re.search(r'\b(low|down|danger|drop|decrease|red)\b', match.group(0), re.IGNORECASE))
+                      is_class_up = bool(re.search(r'\b(high|up|success|increase|green)\b', match.group(0), re.IGNORECASE))
+
+                      numbers = re.findall(r'(\d+(?:[.,]\d+)?)', inner_text.replace("٫", "."))
                       if numbers:
                           try:
-                              value = float(numbers[0].replace(",", "."))
-                              change = -value if is_negative else value
+                              val = float(numbers[0].replace(",", "."))
+                              if is_explicit_negative or (is_class_down and not is_explicit_positive):
+                                  change = -abs(val)
+                              elif is_explicit_positive or is_class_up:
+                                  change = abs(val)
+                              else:
+                                  change = val
                               break
                           except: pass
               return price, change
@@ -139,8 +148,10 @@ jobs:
           p_sekke, c_sekke = extract_data("sekke.html")
 
           old_data = {}
-          try: old_data = json.loads(Path("price.json").read_text(encoding="utf-8"))
-          except: pass
+          try: 
+              old_data = json.loads(Path("price.json").read_text(encoding="utf-8"))
+          except: 
+              pass
           old_markets = old_data.get("markets", {})
           old_changes = old_data.get("changes", {})
 
@@ -149,29 +160,56 @@ jobs:
               toman = int(value // 10 if value > max_val else value)
               return toman if min_val <= toman <= (max_val * 10) else fallback
 
-          final_gold18 = to_toman(p_gold18, 10_000_000, 100_000_000, old_markets.get("gold18") or 23_871_100)
-          final_usd = to_toman(p_usd, 30_000, 300_000, old_markets.get("usd") or 234_010)
-          final_eur = to_toman(p_eur, 30_000, 350_000, old_markets.get("eur") or 266_750)
-          final_sekke = to_toman(p_sekke, 15_000_000, 350_000_000, old_markets.get("sekke") or 238_480_000)
-          final_ons = p_ons if p_ons and 1_000 <= p_ons <= 8_000 else old_markets.get("ons") or 4_285.0
+          final_gold18 = to_toman(p_gold18, 10_000_000, 100_000_000, old_markets.get("gold18") or 25_000_000)
+          final_usd = to_toman(p_usd, 30_000, 300_000, old_markets.get("usd") or 234_000)
+          final_eur = to_toman(p_eur, 30_000, 350_000, old_markets.get("eur") or 266_000)
+          final_sekke = to_toman(p_sekke, 15_000_000, 350_000_000, old_markets.get("sekke") or 238_000_000)
+          final_ons = p_ons if p_ons and 1_000 <= p_ons <= 8_000 else old_markets.get("ons") or 4_141.0
 
           markets = {
-              "gold18": final_gold18, "gold24": int(final_gold18 * (24/18)),
-              "used18": int(final_gold18 * 0.985), "ons": final_ons,
-              "usd": final_usd, "eur": final_eur, "sekke": final_sekke
+              "gold18": final_gold18, 
+              "gold24": int(final_gold18 * (24/18)),
+              "used18": int(final_gold18 * 0.985), 
+              "ons": final_ons,
+              "usd": final_usd, 
+              "eur": final_eur, 
+              "sekke": final_sekke
           }
 
-          def get_change(new_v, key): return round(float(new_v), 2) if new_v is not None else float(old_changes.get(key, 0.0))
+          def resolve_change(new_val, cur_p, old_p, key):
+              # اگر قیمت‌ها در دسترس باشند، خودمان بر اساس مقایسه با نرخ قبلی جهت را تایید می‌کنیم
+              if cur_p and old_p and old_p > 0:
+                  diff = cur_p - old_p
+                  if diff > 0 and new_val is not None:
+                      return round(abs(float(new_val)), 2)
+                  elif diff < 0 and new_val is not None:
+                      return round(-abs(float(new_val)), 2)
+              if new_val is not None:
+                  return round(float(new_val), 2)
+              return float(old_changes.get(key, 0.0))
 
-          changes = {k: get_change(v, k) for k, v in zip(["gold18", "gold24", "used18", "ons", "usd", "eur", "sekke"], 
-                     [c_gold18, c_gold18, c_gold18, c_ons, c_usd, c_eur, c_sekke])}
+          changes = {
+              "gold18": resolve_change(c_gold18, final_gold18, old_markets.get("gold18"), "gold18"),
+              "gold24": resolve_change(c_gold18, markets["gold24"], old_markets.get("gold24"), "gold24"),
+              "used18": resolve_change(c_gold18, markets["used18"], old_markets.get("used18"), "used18"),
+              "ons": resolve_change(c_ons, final_ons, old_markets.get("ons"), "ons"),
+              "usd": resolve_change(c_usd, final_usd, old_markets.get("usd"), "usd"),
+              "eur": resolve_change(c_eur, final_eur, old_markets.get("eur"), "eur"),
+              "sekke": resolve_change(c_sekke, final_sekke, old_markets.get("sekke"), "sekke"),
+          }
 
           tehran_offset = timezone(timedelta(hours=3, minutes=30))
           now = datetime.now(tehran_offset)
           jy, jm, jd = gregorian_to_jalali(now.year, now.month, now.day)
           date_str = f"{jy:04d}/{jm:02d}/{jd:02d} - {now.strftime('%H:%M')}"
 
-          payload = {"price": str(final_gold18), "unit": "تومان", "updated_at": date_str, "markets": markets, "changes": changes}
+          payload = {
+              "price": str(final_gold18), 
+              "unit": "تومان", 
+              "updated_at": date_str, 
+              "markets": markets, 
+              "changes": changes
+          }
           Path("price.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
           PY
 
@@ -182,4 +220,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add price.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update prices with Shamsi date [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Fix change calculation logic [skip ci]" && git push)
